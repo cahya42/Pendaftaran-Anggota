@@ -2,10 +2,20 @@ export function LogoEmblem({ size = 'w-12 h-12 sm:w-14 sm:h-14' }) {
   return (
     <div className={`relative ${size} flex-shrink-0`}>
       <img
-        src="/logo-koperasi.png"
+        src="logo-koperasi.png"
         alt="Logo Koperasi Konsumen HOS Tjokroaminoto"
         className="w-full h-full object-contain drop-shadow-md rounded-full bg-white"
+        onError={(e) => {
+          e.currentTarget.style.display = 'none';
+          e.currentTarget.nextSibling.style.display = 'flex';
+        }}
       />
+      <span
+        style={{ display: 'none' }}
+        className="w-full h-full rounded-full bg-tjokro-green text-tjokro-accentgold items-center justify-center font-black text-xl"
+      >
+        H
+      </span>
     </div>
   );
 }
