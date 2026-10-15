@@ -1,7 +1,8 @@
 import { QRCodeSVG } from 'qrcode.react';
 
 export default function QrStandee({ eventTag, setEventTag, officer, setOfficer, onPreviewHp, notify }) {
-  const qrValue = `${window.location.origin}${window.location.pathname}?koperasi=hostjokroaminoto&ref=${encodeURIComponent(eventTag || 'REKRUTMEN-TJOKRO')}`;
+  const origin = window.location.origin && window.location.origin !== 'null' ? window.location.origin : window.location.href.split('?')[0];
+  const qrValue = `${origin}${window.location.pathname}?koperasi=hostjokroaminoto&ref=${encodeURIComponent(eventTag || 'REKRUTMEN-TJOKRO')}`;
   return (
     <div className="bg-gradient-to-br from-tjokro-darkgreen via-tjokro-green to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-tjokro-gold/20">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
