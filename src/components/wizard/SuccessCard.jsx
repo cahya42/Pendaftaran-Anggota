@@ -9,7 +9,7 @@ export default function SuccessCard({ ticket, onReset, notify }) {
         <span className="inline-block px-3 py-1 bg-amber-100 text-tjokro-amber font-bold text-xs rounded-full">Status: Menunggu Konfirmasi Pengurus</span>
         <h2 className="text-xl sm:text-2xl font-black text-slate-900">Formulir Pendaftaran Berhasil Dikirim!</h2>
         <p className="text-xs text-slate-500 max-w-md mx-auto">
-          Selamat! Formulir Anda telah tercatat di sistem <strong>Koperasi Konsumen HOS TJOKROAMINOTO</strong>. Silakan simpan kartu bukti registrasi berikut.
+          Selamat! Formulir Anda telah tercatat di sistem <strong>Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA</strong>. Silakan simpan kartu bukti registrasi berikut.
         </p>
       </div>
       <div className="bg-gradient-to-br from-tjokro-darkgreen via-tjokro-green to-slate-900 text-white p-6 rounded-3xl max-w-md mx-auto shadow-2xl text-left border-2 border-tjokro-accentgold/30 relative overflow-hidden">
@@ -17,7 +17,7 @@ export default function SuccessCard({ ticket, onReset, notify }) {
         <div className="flex items-center justify-between pb-4 border-b border-white/15">
           <div>
             <p className="text-[10px] uppercase font-bold tracking-widest text-tjokro-accentgold">BUKTI PENDAFTARAN ANGGOTA</p>
-            <h4 className="font-black text-sm tracking-tight text-white leading-tight">KOP. KONSUMEN HOS TJOKROAMINOTO</h4>
+            <h4 className="font-black text-sm tracking-tight text-white leading-tight">KOP. KONSUMEN HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA</h4>
             <p className="text-[9px] text-emerald-200">Purwakarta Istimewa</p>
           </div>
           <i className="fa-solid fa-award text-tjokro-accentgold text-3xl"></i>

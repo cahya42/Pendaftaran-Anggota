@@ -10,12 +10,12 @@ export default function Step4Agreement({ form, setForm, canvasRef, hasSignature,
           </span>
           Persetujuan &amp; Tanda Tangan Digital
         </h2>
-        <p className="text-xs text-slate-500 mt-1">Tahap akhir permohonan keanggotaan Koperasi HOS TJOKROAMINOTO.</p>
+        <p className="text-xs text-slate-500 mt-1">Tahap akhir permohonan keanggotaan Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA.</p>
       </div>
       <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-600 space-y-2 max-h-36 overflow-y-auto">
         <p className="font-bold text-tjokro-darkgreen">Pernyataan Komitmen Calon Anggota:</p>
         <ol className="list-decimal pl-4 space-y-1 text-[11px]">
-          <li>Menyatakan bersedia menjadi anggota <strong>Koperasi Konsumen HOS TJOKROAMINOTO</strong> atas kemauan sendiri secara sadar.</li>
+          <li>Menyatakan bersedia menjadi anggota <strong>Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA</strong> atas kemauan sendiri secara sadar.</li>
           <li>Tunduk dan taat pada Anggaran Dasar / Anggaran Rumah Tangga (AD/ART) serta keputusan Rapat Anggota Tahunan (RAT).</li>
           <li>Bersedia memenuhi kewajiban Simpanan Pokok dan Simpanan Wajib secara tertib.</li>
           <li>Menjunjung tinggi asas kekeluargaan dan gotong royong sesuai amanah kepemimpinan H.O.S. Tjokroaminoto.</li>

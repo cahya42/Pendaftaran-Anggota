@@ -21,7 +21,7 @@ export default function Step3Simpanan({ form, setForm }) {
           </span>
           Simpanan Anggota Koperasi
         </h2>
-        <p className="text-xs text-slate-500 mt-1">Sesuai AD/ART Koperasi Konsumen HOS TJOKROAMINOTO, anggota memiliki modal bersama.</p>
+        <p className="text-xs text-slate-500 mt-1">Sesuai AD/ART Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA, anggota memiliki modal bersama.</p>
       </div>
       <div className="bg-gradient-to-br from-tjokro-mint/70 via-white to-amber-50/50 border border-tjokro-green/20 rounded-2xl p-5 space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-tjokro-green/10">

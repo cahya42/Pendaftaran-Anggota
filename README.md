@@ -1,4 +1,4 @@
-# Pendaftaran Anggota — Koperasi Konsumen HOS TJOKROAMINOTO (React + Vite)
+# Pendaftaran Anggota — Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA (React + Vite)
 
 Hasil konversi dari `sistem_perekrutan_anggota.html` menjadi aplikasi React-Vite
 dengan Tailwind CSS, QR Code standee, wizard 4 langkah, tanda tangan digital,

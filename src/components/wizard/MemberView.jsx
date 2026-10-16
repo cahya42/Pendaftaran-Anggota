@@ -70,7 +70,7 @@ export default function MemberView({ onAddApplicant, notify }) {
   const submit = async () => {
     if (submitting) return;
     if (!form.agreed) {
-      notify('Centang persetujuan AD/ART Koperasi HOS Tjokroaminoto', 'error');
+      notify('Centang persetujuan AD/ART Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA', 'error');
       return;
     }
     if (!hasSignature) {
@@ -108,7 +108,7 @@ export default function MemberView({ onAddApplicant, notify }) {
       const saved = await onAddApplicant(newMember);
       const finalId = saved?.id || regId;
       setTicket({ id: finalId, nama: form.nama, nik: form.nik, tanggalDaftar: today });
-      notify('Pendaftaran Anda berhasil tercatat di Koperasi HOS Tjokroaminoto!', 'success');
+      notify('Pendaftaran Anda berhasil tercatat di Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA!', 'success');
     } catch (err) {
       console.error('[daftar] simpan gagal:', err?.message || err);
       notify('GAGAL menyimpan ke database: ' + (err?.message || 'koneksi Supabase bermasalah') + '. Data belum tercatat — coba lagi.', 'error');

@@ -26,7 +26,7 @@ export default function AdminPanel({ applicants, onChangeStatus, onChangePayment
   const [filter, setFilter] = useState('ALL');
   const [detailId, setDetailId] = useState(null);
   const [eventTag, setEventTag] = useState('EVENT-PURWAKARTA-ISTIMEWA');
-  const [officer, setOfficer] = useState('Pengurus Koperasi HOS TJOKRO');
+  const [officer, setOfficer] = useState('Pengurus Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA');
   const [printDetailData, setPrintDetailData] = useState(null);
   const printListRef = useRef(null);
   const printDetailRef = useRef(null);

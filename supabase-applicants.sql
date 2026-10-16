@@ -1,5 +1,5 @@
 -- ============================================================
--- KOPERASI KONSUMEN HOS TJOKROAMINOTO — Tabel pendaftar anggota
+-- KOPERASI KONSUMEN HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA — Tabel pendaftar anggota
 -- Jalankan di Supabase Dashboard > SQL Editor > New query
 -- ============================================================
 

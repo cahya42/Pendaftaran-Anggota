@@ -5,8 +5,8 @@ function PrintHeader({ title, subtitle }) {
     <div className="print-kop">
       <img src="logo-koperasi.png" alt="Logo Koperasi" className="print-logo" />
       <div className="print-kop-text">
-        <h1>KOPERASI KONSUMEN HOS TJOKROAMINOTO</h1>
-        <p>Purwakarta Istimewa &bull; &quot;Bersama Membangun, Sejahtera Bersama&quot;</p>
+        <h1>KOPERASI KONSUMEN HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA</h1>
+        <p>&quot;Bersama Membangun, Sejahtera Bersama&quot;</p>
         <h2>{title}</h2>
         {subtitle && <p className="print-sub">{subtitle}</p>}
       </div>

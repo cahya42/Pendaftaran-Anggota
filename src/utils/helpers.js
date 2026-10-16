@@ -58,7 +58,7 @@ export function exportApplicantsToCSV(applicants) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `Data_Anggota_Koperasi_HOS_Tjokroaminoto_${new Date().toISOString().slice(0, 10)}.csv`;
+  link.download = `Data_Anggota_Koperasi_HOS_Tjokroaminoto_Purwakarta_Istimewa_${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

@@ -3,7 +3,7 @@ export function LogoEmblem({ size = 'w-12 h-12 sm:w-14 sm:h-14' }) {
     <div className={`relative ${size} flex-shrink-0`}>
       <img
         src="logo-koperasi.png"
-        alt="Logo Koperasi Konsumen HOS Tjokroaminoto"
+        alt="Logo Koperasi Konsumen HOS Tjokroaminoto Purwakarta Istimewa"
         className="w-full h-full object-contain drop-shadow-md rounded-full bg-white"
         onError={(e) => {
           e.currentTarget.style.display = 'none';
