@@ -24,6 +24,11 @@ export default function Header({ view, onSwitch }) {
   const btnBase = 'flex items-center justify-center gap-2 px-3 py-1.5 text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm border border-transparent';
   const btnActive = `${btnBase} bg-tjokro-green text-white`;
   const btnIdle = `${btnBase} text-slate-600 hover:text-slate-900 border border-slate-200`;
+
+  // Halaman /daftar (diakses calon anggota via QR) — tidak ada tombol navigasi sama sekali
+  const isDaftarPage = typeof window !== 'undefined' &&
+    (window.location.pathname === '/daftar' || window.location.pathname.endsWith('/daftar'));
+
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-tjokro-green/15 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,14 +54,12 @@ export default function Header({ view, onSwitch }) {
             <span className="sm:hidden block">&quot;Bersama Membangun, Sejahtera Bersama&quot;</span>
           </p>
 
-          {/* Baris 3: Tombol navigasi */}
-          {/* view === 'admin' (halaman utama): 2 tombol berdampingan (Daftar + Admin) */}
-          {/* view === 'member' (halaman /daftar): tidak ada tombol navigasi — sudah ada di halaman pendaftaran */}
-          {view === 'admin' && (
+          {/* Baris 3: Tombol navigasi — hanya di halaman utama, SELALU 2 tombol (Daftar + Admin) */}
+          {!isDaftarPage && (
             <div className="flex gap-2 w-full">
               <button
                 onClick={() => onSwitch('member')}
-                className={`${btnIdle} flex-1`}
+                className={`${view === 'member' ? btnActive : btnIdle} flex-1`}
               >
                 <i className="fa-solid fa-qrcode text-tjokro-accentgold"></i>
                 <span className="hidden sm:inline">Formulir Calon Anggota</span>
@@ -64,7 +67,7 @@ export default function Header({ view, onSwitch }) {
               </button>
               <button
                 onClick={() => onSwitch('admin')}
-                className={`${btnActive} flex-1`}
+                className={`${view === 'admin' ? btnActive : btnIdle} flex-1`}
               >
                 <i className="fa-solid fa-users-gear text-xs"></i>
                 <span className="hidden sm:inline">Panel Pengurus</span>
