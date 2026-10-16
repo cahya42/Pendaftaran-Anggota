@@ -72,10 +72,10 @@ export async function insertApplicant(applicant) {
   const { data, error } = await supabase
     .from(TABLE)
     .insert(applicantToRow(applicant))
-    .select()
-    .single();
+    .select();
   if (error) throw error;
-  return rowToApplicant(data);
+  const row = (data || [])[0];
+  return row ? rowToApplicant(row) : null;
 }
 
 export async function updateApplicantStatus(regNo, status, nia = null) {
@@ -85,10 +85,10 @@ export async function updateApplicantStatus(regNo, status, nia = null) {
     .from(TABLE)
     .update(patch)
     .eq('reg_no', regNo)
-    .select()
-    .single();
+    .select();
   if (error) throw error;
-  return rowToApplicant(data);
+  const row = (data || [])[0];
+  return row ? rowToApplicant(row) : null;
 }
 
 export async function updatePaymentStatus(regNo, statusBayar) {
@@ -96,8 +96,8 @@ export async function updatePaymentStatus(regNo, statusBayar) {
     .from(TABLE)
     .update({ status_bayar: statusBayar })
     .eq('reg_no', regNo)
-    .select()
-    .single();
+    .select();
   if (error) throw error;
-  return rowToApplicant(data);
+  const row = (data || [])[0];
+  return row ? rowToApplicant(row) : null;
 }
