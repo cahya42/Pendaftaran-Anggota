@@ -10,7 +10,13 @@ import { generateNia } from './utils/helpers.js';
 const SUPABASE_READY = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 export default function App() {
-  const [view, setView] = useState('member');
+  const [view, setView] = useState(() => {
+    if (typeof window === 'undefined') return 'home';
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('daftar') === '1' || params.get('view') === 'member') return 'member';
+    if (params.get('admin') === '1' || params.get('view') === 'admin') return 'admin';
+    return 'home';
+  });
   const [applicants, setApplicants] = useState(INITIAL_APPLICANTS);
   const [loading, setLoading] = useState(SUPABASE_READY);
   const [dbOnline, setDbOnline] = useState(false);
@@ -102,9 +108,7 @@ export default function App() {
             <i className="fa-solid fa-circle-notch fa-spin text-tjokro-green text-2xl mb-3"></i>
             <p className="font-semibold">Menghubungkan ke database Supabase...</p>
           </div>
-        ) : view === 'member' ? (
-          <MemberView onAddApplicant={addApplicant} notify={notify} />
-        ) : (
+        ) : view === 'admin' ? (
           <AdminPanel
             applicants={applicants}
             onChangeStatus={changeStatus}
@@ -115,6 +119,8 @@ export default function App() {
               notify('Simulasi: Halaman formulir terbuka otomatis di HP calon anggota!', 'info');
             }}
           />
+        ) : (
+          <MemberView onAddApplicant={addApplicant} notify={notify} />
         )}
       </main>
       <Toast toast={toast} />

@@ -50,29 +50,31 @@ export default function Header({ view, onSwitch }) {
           </p>
 
           {/* Baris 3: Tombol navigasi */}
-          {/* Calon anggota (view === 'member'): hanya tombol Daftar */}
-          {view === 'member' && (
-            <button
-              onClick={() => onSwitch('member')}
-              className={`${btnActive} flex-1`}
-            >
-              <i className="fa-solid fa-qrcode text-tjokro-accentgold"></i>
-              <span className="hidden sm:inline">Formulir Calon Anggota</span>
-              <span className="sm:inline-block sm:hidden">Form QR</span>
-            </button>
-          )}
-
-          {/* Admin (view === 'admin'): hanya tombol Panel Pengurus */}
-          {view === 'admin' && (
-            <button
-              onClick={() => onSwitch('admin')}
-              className={`${btnActive} flex-1`}
-            >
-              <i className="fa-solid fa-users-gear text-xs"></i>
-              <span className="hidden sm:inline">Panel Pengurus</span>
-              <span className="sm:inline-block sm:hidden">Admin</span>
-            </button>
-          )}
+          {/* view === 'home' (link utama): keduanya berdampingan */}
+          {/* view === 'member' (link QR pendaftaran): hanya tombol Daftar */}
+          {/* view === 'admin' (link admin): hanya tombol Admin */}
+          <div className="flex gap-2 w-full">
+            {(view === 'home' || view === 'member') && (
+              <button
+                onClick={() => onSwitch('member')}
+                className={`${view === 'member' ? btnActive : btnIdle} flex-1`}
+              >
+                <i className="fa-solid fa-qrcode text-tjokro-accentgold"></i>
+                <span className="hidden sm:inline">Formulir Calon Anggota</span>
+                <span className="sm:inline-block sm:hidden">Form QR</span>
+              </button>
+            )}
+            {(view === 'home' || view === 'admin') && (
+              <button
+                onClick={() => onSwitch('admin')}
+                className={`${view === 'admin' ? btnActive : btnIdle} flex-1`}
+              >
+                <i className="fa-solid fa-users-gear text-xs"></i>
+                <span className="hidden sm:inline">Panel Pengurus</span>
+                <span className="sm:inline-block sm:hidden">Admin</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </header>
