@@ -50,31 +50,28 @@ export default function Header({ view, onSwitch }) {
           </p>
 
           {/* Baris 3: Tombol navigasi */}
-          {/* view === 'home' (link utama): keduanya berdampingan */}
-          {/* view === 'member' (link QR pendaftaran): hanya tombol Daftar */}
-          {/* view === 'admin' (link admin): hanya tombol Admin */}
-          <div className="flex gap-2 w-full">
-            {(view === 'home' || view === 'member') && (
+          {/* view === 'admin' (halaman utama): 2 tombol berdampingan (Daftar + Admin) */}
+          {/* view === 'member' (halaman /daftar): tidak ada tombol navigasi — sudah ada di halaman pendaftaran */}
+          {view === 'admin' && (
+            <div className="flex gap-2 w-full">
               <button
                 onClick={() => onSwitch('member')}
-                className={`${view === 'member' ? btnActive : btnIdle} flex-1`}
+                className={`${btnIdle} flex-1`}
               >
                 <i className="fa-solid fa-qrcode text-tjokro-accentgold"></i>
                 <span className="hidden sm:inline">Formulir Calon Anggota</span>
                 <span className="sm:inline-block sm:hidden">Form QR</span>
               </button>
-            )}
-            {(view === 'home' || view === 'admin') && (
               <button
                 onClick={() => onSwitch('admin')}
-                className={`${view === 'admin' ? btnActive : btnIdle} flex-1`}
+                className={`${btnActive} flex-1`}
               >
                 <i className="fa-solid fa-users-gear text-xs"></i>
                 <span className="hidden sm:inline">Panel Pengurus</span>
                 <span className="sm:inline-block sm:hidden">Admin</span>
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </header>

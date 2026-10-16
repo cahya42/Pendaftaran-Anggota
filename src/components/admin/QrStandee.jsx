@@ -5,7 +5,7 @@ export default function QrStandee({ eventTag, setEventTag, officer, setOfficer, 
   const base = isFile
     ? window.location.href.split('?')[0]
     : `${window.location.origin}${window.location.pathname}`;
-  const qrValue = `${base}?daftar=1&ref=${encodeURIComponent(eventTag || 'REKRUTMEN-TJOKRO')}`;
+  const qrValue = `${base}/daftar?ref=${encodeURIComponent(eventTag || 'REKRUTMEN-TJOKRO')}`;
   return (
     <div className="bg-gradient-to-br from-tjokro-darkgreen via-tjokro-green to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-tjokro-gold/20">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">

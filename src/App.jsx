@@ -11,11 +11,10 @@ const SUPABASE_READY = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.
 
 export default function App() {
   const [view, setView] = useState(() => {
-    if (typeof window === 'undefined') return 'home';
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('daftar') === '1' || params.get('view') === 'member') return 'member';
-    if (params.get('admin') === '1' || params.get('view') === 'admin') return 'admin';
-    return 'home';
+    if (typeof window === 'undefined') return 'admin';
+    const path = window.location.pathname;
+    if (path === '/daftar' || path.endsWith('/daftar')) return 'member';
+    return 'admin';
   });
   const [applicants, setApplicants] = useState(INITIAL_APPLICANTS);
   const [loading, setLoading] = useState(SUPABASE_READY);
@@ -115,8 +114,8 @@ export default function App() {
             onChangePaymentStatus={changePaymentStatus}
             notify={notify}
             onPreviewHp={() => {
-              setView('member');
-              notify('Simulasi: Halaman formulir terbuka otomatis di HP calon anggota!', 'info');
+              window.location.href = '/daftar';
+              notify('Membuka halaman pendaftaran anggota...', 'info');
             }}
           />
         ) : (
