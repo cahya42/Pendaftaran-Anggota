@@ -162,4 +162,17 @@
   .print-sign-space {
     height: 64px;
   }
+  .print-bukti {
+    max-height: 70px;
+    max-width: 100%;
+    border: 1px solid #999;
+    border-radius: 6px;
+    margin-top: 4px;
+    display: block;
+  }
+  .print-caption {
+    font-size: 8px;
+    color: #555;
+    margin-top: 2px;
+  }
 }

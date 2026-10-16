@@ -1,8 +1,17 @@
+import { useRef } from 'react';
 import { PILIHAN_WAJIB, SIMPANAN_POKOK } from '../../data/applicants.js';
-import { formatRupiah } from '../../utils/helpers.js';
+import { formatRupiah, readFileAsDataURL } from '../../utils/helpers.js';
 
 export default function Step3Simpanan({ form, setForm }) {
-  const total = SIMPANAN_POKOK + Number(form.simpananWajib || 0);
+  const sukarela = Number(form.simpananSukarela || 0);
+  const total = SIMPANAN_POKOK + Number(form.simpananWajib || 0) + sukarela;
+  const buktiRef = useRef(null);
+
+  const setSukarela = (val) => {
+    const n = val === '' ? 0 : Math.max(0, parseInt(val, 10) || 0);
+    setForm((p) => ({ ...p, simpananSukarela: n }));
+  };
+
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-5">
       <div className="border-b border-slate-100 pb-3">
@@ -39,10 +48,28 @@ export default function Step3Simpanan({ form, setForm }) {
             </select>
           </div>
         </div>
+
+        {/* 3. Simpanan Sukarela — nominal bebas diisi calon anggota */}
+        <div className="flex items-center justify-between pb-3 border-b border-tjokro-green/10">
+          <div>
+            <h3 className="font-bold text-sm text-tjokro-darkgreen">3. Simpanan Sukarela <span className="text-tjokro-gold text-[10px] font-black">(Opsional)</span></h3>
+            <p className="text-xs text-slate-500">Nominal ditambahkan sendiri oleh calon anggota — boleh dikosongkan</p>
+          </div>
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400 text-[11px] font-black pointer-events-none">Rp</span>
+            <input
+              type="number" min="0" step="1000" placeholder="0"
+              value={form.simpananSukarela || ''}
+              onChange={(e) => setSukarela(e.target.value)}
+              className="w-32 pl-7 pr-2.5 py-1.5 bg-white border border-tjokro-green/30 rounded-xl text-xs font-bold text-tjokro-darkgreen focus:outline-none text-right"
+            />
+          </div>
+        </div>
+
         <div className="flex items-center justify-between pt-1">
           <div>
             <span className="text-xs uppercase font-extrabold tracking-wider text-tjokro-gold">Total Komitmen Setoran Awal</span>
-            <p className="text-[11px] text-slate-500">Dibayarkan saat disahkan pengurus</p>
+            <p className="text-[11px] text-slate-500">Pokok + Wajib + Sukarela — dibayarkan saat disahkan pengurus</p>
           </div>
           <span className="text-xl font-black text-tjokro-green font-mono">{formatRupiah(total)}</span>
         </div>
@@ -77,6 +104,42 @@ export default function Step3Simpanan({ form, setForm }) {
             );
           })}
         </div>
+      </div>
+
+      {/* Upload Bukti Pembayaran (opsional) */}
+      <div className="space-y-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+          Bukti Pembayaran Setoran Awal <span className="text-slate-400 font-normal">(Opsional)</span>
+        </label>
+        <div
+          onClick={() => buktiRef.current?.click()}
+          className="border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center hover:border-tjokro-green bg-slate-50/60 min-h-[140px] flex flex-col items-center justify-center relative overflow-hidden transition group cursor-pointer"
+        >
+          <input
+            ref={buktiRef} type="file" accept="image/*" className="hidden"
+            onChange={async (e) => {
+              const f = e.target.files?.[0];
+              if (!f) return;
+              const dataUrl = await readFileAsDataURL(f);
+              setForm((p) => ({ ...p, buktiBayarPreview: dataUrl }));
+            }}
+          />
+          {!form.buktiBayarPreview ? (
+            <div className="flex flex-col items-center pointer-events-none">
+              <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2 text-lg group-hover:scale-110 transition">
+                <i className="fa-solid fa-receipt"></i>
+              </div>
+              <p className="text-xs font-bold text-slate-700">Unggah screenshot QRIS / struk transfer</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">Boleh dilewati — unggah setelah Anda membayar</p>
+            </div>
+          ) : (
+            <img src={form.buktiBayarPreview} alt="Bukti bayar" className="absolute inset-0 w-full h-full object-cover rounded-2xl" />
+          )}
+        </div>
+        <p className="text-[11px] text-slate-400">
+          <i className="fa-solid fa-shield-halved text-tjokro-green mr-1"></i>
+          Tampil di Panel Pengurus untuk verifikasi — status &quot;Lunas&quot; ditandai setelah cocok dengan mutasi rekening.
+        </p>
       </div>
     </div>
   );

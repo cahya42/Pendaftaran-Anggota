@@ -26,8 +26,13 @@ export function ApplicantRows({ rows, onDetail, onQuickApprove }) {
           </td>
           <td className="py-3 px-4 text-slate-600">{item.pekerjaan}</td>
           <td className="py-3 px-4">
-            <span className="font-mono font-bold text-slate-800">Rp {(item.simpananPokok + item.simpananWajib).toLocaleString('id-ID')}</span>
+            <span className="font-mono font-bold text-slate-800">Rp {(item.simpananPokok + item.simpananWajib + (item.simpananSukarela || 0)).toLocaleString('id-ID')}</span>
             <div className="text-[10px] text-slate-400">{item.metode}</div>
+            <span className={`mt-0.5 inline-block px-1.5 py-px rounded text-[9px] font-black ${
+              item.statusBayar === 'Lunas' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
+            }`}>
+              Bayar: {item.statusBayar || 'Belum'}
+            </span>
           </td>
           <td className="py-3 px-4">
             <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${badgeClass(item.status)}`}>{item.status}</span>

@@ -29,8 +29,10 @@ export function exportApplicantsToCSV(applicants) {
     'Alamat Lengkap',
     'Simpanan Pokok (Rp)',
     'Simpanan Wajib (Rp)',
+    'Simpanan Sukarela (Rp)',
     'Metode Pembayaran',
     'Status Verifikasi',
+    'Status Bayar',
   ];
   const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
   const rows = applicants.map((a) => [
@@ -46,8 +48,10 @@ export function exportApplicantsToCSV(applicants) {
     esc(a.alamat),
     a.simpananPokok,
     a.simpananWajib,
+    a.simpananSukarela || 0,
     esc(a.metode),
     esc(a.status),
+    esc(a.statusBayar || 'Belum'),
   ]);
   const csv = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

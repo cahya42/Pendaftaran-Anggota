@@ -1,7 +1,10 @@
 import { formatRupiah } from '../../utils/helpers.js';
 
-export default function ApplicantModal({ applicant, onClose, onChangeStatus, onPrintDetail }) {
+export default function ApplicantModal({ applicant, onClose, onChangeStatus, onPrintDetail, onChangePaymentStatus }) {
   if (!applicant) return null;
+  const lunas = applicant.statusBayar === 'Lunas';
+  const sukarela = applicant.simpananSukarela || 0;
+  const totalAll = applicant.simpananPokok + applicant.simpananWajib + sukarela;
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-200">
@@ -27,12 +30,34 @@ export default function ApplicantModal({ applicant, onClose, onChangeStatus, onP
           <div className="bg-tjokro-mint/60 border border-tjokro-green/20 p-4 rounded-2xl flex items-center justify-between">
             <div>
               <span className="text-[10px] text-tjokro-darkgreen uppercase font-bold">Komitmen Setoran Awal</span>
-              <p className="text-slate-600 text-xs mt-0.5">Pokok: {formatRupiah(applicant.simpananPokok)} + Wajib: <span className="font-bold font-mono">{formatRupiah(applicant.simpananWajib)}</span></p>
+              <p className="text-slate-600 text-xs mt-0.5">
+                Pokok: {formatRupiah(applicant.simpananPokok)} + Wajib: <span className="font-bold font-mono">{formatRupiah(applicant.simpananWajib)}</span>
+                {sukarela > 0 && <> + Sukarela: <span className="font-bold font-mono">{formatRupiah(sukarela)}</span></>}
+              </p>
+              <p className="text-[11px] text-tjokro-green font-black mt-0.5">Total: {formatRupiah(totalAll)}</p>
             </div>
             <div className="text-right">
               <span className="text-[10px] text-slate-400 uppercase">Metode Rencana:</span>
               <p className="font-bold text-tjokro-darkgreen text-xs">{applicant.metode}</p>
             </div>
+          </div>
+
+          {/* Status & Bukti Pembayaran */}
+          <div className={`p-4 rounded-2xl border ${lunas ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'}`}>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-600">Status Pembayaran</span>
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black ${lunas ? 'bg-emerald-600 text-white' : 'bg-amber-200 text-amber-800'}`}>
+                {lunas ? 'LUNAS' : 'BELUM LUNAS'}
+              </span>
+            </div>
+            {applicant.buktiBayarUrl ? (
+              <div className="text-center">
+                <img src={applicant.buktiBayarUrl} alt="Bukti pembayaran" className="max-h-40 mx-auto rounded-xl object-contain border border-slate-200 shadow-sm bg-white" />
+                <p className="text-[10px] text-slate-500 mt-1">Bukti diunggah calon anggota — cocokkan dengan mutasi rekening.</p>
+              </div>
+            ) : (
+              <p className="text-[11px] text-slate-500"><i className="fa-regular fa-image mr-1"></i>Belum ada bukti pembayaran yang diunggah.</p>
+            )}
           </div>
           <div>
             <h4 className="font-bold text-slate-900 mb-2">Lampiran Berkas &amp; Tanda Tangan:</h4>
@@ -50,6 +75,15 @@ export default function ApplicantModal({ applicant, onClose, onChangeStatus, onP
         </div>
         <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2.5 flex-wrap">
           <button onClick={onClose} className="px-4 py-2 rounded-xl border border-slate-300 font-bold text-xs text-slate-600 hover:bg-slate-200 transition">Tutup</button>
+          <button
+            onClick={() => onChangePaymentStatus(applicant.id, lunas ? 'Belum' : 'Lunas')}
+            className={`cursor-pointer px-4 py-2 rounded-xl font-bold text-xs transition flex items-center gap-1.5 ${
+              lunas ? 'border border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100' : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+            }`}
+          >
+            <i className={`fa-solid ${lunas ? 'fa-rotate-left' : 'fa-money-bill-transfer'}`}></i>
+            {lunas ? 'Tandai Belum Lunas' : 'Tandai Sudah Lunas'}
+          </button>
           <button type="button" onClick={() => onPrintDetail(applicant)} className="cursor-pointer px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs transition flex items-center gap-1.5">
             <i className="fa-solid fa-print text-tjokro-accentgold"></i> Cetak Formulir
           </button>

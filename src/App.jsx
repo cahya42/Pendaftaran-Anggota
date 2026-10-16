@@ -4,7 +4,7 @@ import Toast from './components/Toast.jsx';
 import MemberView from './components/wizard/MemberView.jsx';
 import AdminPanel from './components/admin/AdminPanel.jsx';
 import { INITIAL_APPLICANTS } from './data/applicants.js';
-import { fetchApplicants, insertApplicant, updateApplicantStatus } from './lib/applicantsService.js';
+import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus } from './lib/applicantsService.js';
 import { generateNia } from './utils/helpers.js';
 
 const SUPABASE_READY = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
@@ -66,6 +66,18 @@ export default function App() {
     }
   };
 
+  const changePaymentStatus = async (id, statusBayar) => {
+    setApplicants((prev) => prev.map((a) => (a.id !== id ? a : { ...a, statusBayar })));
+    notify(`Pembayaran ${id} ditandai: ${statusBayar === 'Lunas' ? 'LUNAS ✓' : 'Belum Lunas'}`, statusBayar === 'Lunas' ? 'success' : 'info');
+    if (!dbOnline) return;
+    try {
+      await updatePaymentStatus(id, statusBayar);
+    } catch (err) {
+      console.error('[supabase] update status bayar gagal:', err.message);
+      notify('Gagal menyimpan status pembayaran ke Supabase: ' + err.message, 'error');
+    }
+  };
+
   return (
     <div className="bg-slate-100 text-slate-800 font-sans min-h-screen antialiased flex flex-col selection:bg-tjokro-green selection:text-white">
       <Header view={view} onSwitch={setView} />
@@ -96,6 +108,7 @@ export default function App() {
           <AdminPanel
             applicants={applicants}
             onChangeStatus={changeStatus}
+            onChangePaymentStatus={changePaymentStatus}
             notify={notify}
             onPreviewHp={() => {
               setView('member');

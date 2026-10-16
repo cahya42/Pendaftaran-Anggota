@@ -31,8 +31,9 @@ export function PrintApplicantList({ rows, statusFilter, search, printRef }) {
             <th>No. Registrasi / NIA</th>
             <th>Nama / NIK</th>
             <th>Kontak</th>
-            <th>Setoran (Pokok+Wajib)</th>
+            <th>Setoran (Pokok+Wajib+Sukarela)</th>
             <th>Status</th>
+            <th>Bayar</th>
             <th>TTD Pengurus</th>
           </tr>
         </thead>
@@ -43,8 +44,9 @@ export function PrintApplicantList({ rows, statusFilter, search, printRef }) {
               <td>{a.id}<br />{a.nia}</td>
               <td><strong>{a.nama}</strong><br />NIK: {a.nik}<br />{a.ttl}</td>
               <td>{a.hp}<br />{a.pekerjaan}</td>
-              <td>{formatRupiah(a.simpananPokok + a.simpananWajib)}<br />{a.metode}</td>
+              <td>{formatRupiah(a.simpananPokok + a.simpananWajib + (a.simpananSukarela || 0))}<br />{a.metode}</td>
               <td>{a.status}</td>
+              <td>{a.statusBayar || 'Belum'}</td>
               <td className="print-sign-col"></td>
             </tr>
           ))}
@@ -95,9 +97,21 @@ export function PrintApplicantDetail({ applicant, printRef }) {
           {row('Alamat Domisili', applicant.alamat)}
           {row('Simpanan Pokok', formatRupiah(applicant.simpananPokok))}
           {row('Simpanan Wajib', `${formatRupiah(applicant.simpananWajib)} / bulan`)}
-          {row('Total Setoran Awal', <strong>{formatRupiah(applicant.simpananPokok + applicant.simpananWajib)}</strong>)}
+          {applicant.simpananSukarela && row('Simpanan Sukarela', formatRupiah(applicant.simpananSukarela))}
+          {row('Total Setoran Awal', <strong>{formatRupiah(applicant.simpananPokok + applicant.simpananWajib + (applicant.simpananSukarela || 0))}</strong>)}
           {row('Metode Pembayaran', applicant.metode)}
+          {row('Status Pembayaran', applicant.statusBayar || 'Belum')}
           {row('Tanggal Daftar', applicant.tanggalDaftar)}
+          {applicant.buktiBayarUrl && (
+            <tr>
+              <td className="print-label">Bukti Pembayaran</td>
+              <td className="print-sep">:</td>
+              <td>
+                <img src={applicant.buktiBayarUrl} alt="Bukti pembayaran" className="print-bukti" />
+                <p className="print-caption">Bukti diunggah calon anggota — verifikasi dengan mutasi rekening.</p>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
       <div className="print-sign-row">

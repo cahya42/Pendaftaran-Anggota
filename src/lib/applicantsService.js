@@ -20,11 +20,14 @@ export function rowToApplicant(row) {
     alamat: row.alamat || '-',
     simpananPokok: Number(row.simpanan_pokok || 0),
     simpananWajib: Number(row.simpanan_wajib || 0),
+    simpananSukarela: Number(row.simpanan_sukarela || 0),
     metode: row.metode || '-',
     status: row.status || 'Menunggu',
+    statusBayar: row.status_bayar || 'Belum',
     tanggalDaftar: row.tanggal_daftar || '-',
     ktpUrl: row.ktp_url || '',
     selfieUrl: row.selfie_url || '',
+    buktiBayarUrl: row.bukti_bayar_url || '',
     ttdUrl: row.ttd_url || '',
   };
 }
@@ -44,11 +47,14 @@ export function applicantToRow(a) {
     alamat: a.alamat,
     simpanan_pokok: a.simpananPokok,
     simpanan_wajib: a.simpananWajib,
+    simpanan_sukarela: a.simpananSukarela || 0,
     metode: a.metode,
     status: a.status,
+    status_bayar: a.statusBayar || 'Belum',
     tanggal_daftar: a.tanggalDaftar,
     ktp_url: a.ktpUrl || null,
     selfie_url: a.selfieUrl || null,
+    bukti_bayar_url: a.buktiBayarUrl || null,
     ttd_url: a.ttdUrl || null,
   };
 }
@@ -78,6 +84,17 @@ export async function updateApplicantStatus(regNo, status, nia = null) {
   const { data, error } = await supabase
     .from(TABLE)
     .update(patch)
+    .eq('reg_no', regNo)
+    .select()
+    .single();
+  if (error) throw error;
+  return rowToApplicant(data);
+}
+
+export async function updatePaymentStatus(regNo, statusBayar) {
+  const { data, error } = await supabase
+    .from(TABLE)
+    .update({ status_bayar: statusBayar })
     .eq('reg_no', regNo)
     .select()
     .single();

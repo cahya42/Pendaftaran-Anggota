@@ -21,7 +21,7 @@ function doPrint(mode) {
   window.print();
 }
 
-export default function AdminPanel({ applicants, onChangeStatus, notify, onPreviewHp }) {
+export default function AdminPanel({ applicants, onChangeStatus, onChangePaymentStatus, notify, onPreviewHp }) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('ALL');
   const [detailId, setDetailId] = useState(null);
@@ -81,7 +81,7 @@ export default function AdminPanel({ applicants, onChangeStatus, notify, onPrevi
         </div>
         {rows.length === 0 && (<div className="p-8 text-center text-slate-400 text-xs"><i className="fa-regular fa-folder-open text-2xl mb-1 block"></i>Tidak ditemukan data pendaftar.</div>)}
       </div>
-      <ApplicantModal applicant={applicants.find((a) => a.id === detailId) || null} onClose={() => setDetailId(null)} onChangeStatus={changeStatus} onPrintDetail={onPrintDetail} />
+      <ApplicantModal applicant={applicants.find((a) => a.id === detailId) || null} onClose={() => setDetailId(null)} onChangeStatus={changeStatus} onPrintDetail={onPrintDetail} onChangePaymentStatus={onChangePaymentStatus} />
 
       {/* Lembar tersembunyi — hanya muncul saat Ctrl+P / tombol cetak */}
       <PrintApplicantList rows={rows} statusFilter={filter} search={search} printRef={printListRef} />

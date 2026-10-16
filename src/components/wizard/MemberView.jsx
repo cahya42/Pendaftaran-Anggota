@@ -21,7 +21,9 @@ const EMPTY_FORM = {
   ktpPreview: '',
   selfiePreview: '',
   simpananWajib: 10000,
+  simpananSukarela: 0,
   metode: 'QRIS',
+  buktiBayarPreview: '',
   agreed: false,
 };
 
@@ -89,11 +91,14 @@ export default function MemberView({ onAddApplicant, notify }) {
       alamat: form.alamat,
       simpananPokok: SIMPANAN_POKOK,
       simpananWajib: Number(form.simpananWajib),
+      simpananSukarela: Number(form.simpananSukarela || 0),
       metode: form.metode,
       status: 'Menunggu',
+      statusBayar: 'Belum',
       tanggalDaftar: today,
       ktpUrl: form.ktpPreview,
       selfieUrl: form.selfiePreview,
+      buktiBayarUrl: form.buktiBayarPreview || '',
       ttdUrl: signatureData,
     };
     const saved = await onAddApplicant(newMember);
