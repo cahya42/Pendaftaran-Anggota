@@ -4,7 +4,7 @@ import Toast from './components/Toast.jsx';
 import MemberView from './components/wizard/MemberView.jsx';
 import AdminPanel from './components/admin/AdminPanel.jsx';
 import { INITIAL_APPLICANTS } from './data/applicants.js';
-import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus, deleteApplicant, updateApplicant } from './lib/applicantsService.js';
+import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus, deleteApplicant, updateApplicant, subscribeApplicants } from './lib/applicantsService.js';
 import { generateNia } from './utils/helpers.js';
 
 const SUPABASE_READY = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
@@ -30,18 +30,41 @@ export default function App() {
       setLoading(false);
       return;
     }
-    fetchApplicants()
-      .then((rows) => {
-        // Koneksi OK -> tandai online walau tabel masih kosong,
-        // dan pakai data DB apa adanya (jangan campur data contoh).
-        setApplicants(rows);
-        setDbOnline(true);
-      })
-      .catch((err) => {
-        console.error('[supabase] fetch gagal:', err.message);
-        notify('Database Supabase belum siap / tabel belum dibuat. Memakai data contoh lokal.', 'error');
-      })
-      .finally(() => setLoading(false));
+    let unsubscribe = null;
+    let cancelled = false;
+    const reload = (silent = true) =>
+      fetchApplicants()
+        .then((rows) => {
+          if (cancelled) return;
+          // Koneksi OK -> tandai online walau tabel masih kosong,
+          // dan pakai data DB apa adanya (jangan campur data contoh).
+          setApplicants(rows);
+          setDbOnline(true);
+        })
+        .catch((err) => {
+          if (cancelled) return;
+          console.error('[supabase] fetch gagal:', err.message);
+          if (!silent) notify('Gagal memuat ulang: ' + err.message, 'error');
+          else notify('Database Supabase belum siap / tabel belum dibuat. Memakai data contoh lokal.', 'error');
+        });
+    reload(true).finally(() => {
+      if (!cancelled) setLoading(false);
+    });
+    // Realtime: pendaftar baru / perubahan status langsung masuk tanpa refresh.
+    unsubscribe = subscribeApplicants(() => reload(true));
+    // Pengaman: polling tiap 20 detik bila realtime belum aktif (mis. replication off).
+    const poll = setInterval(() => {
+      if (document.visibilityState === 'visible') reload(true);
+    }, 20000);
+    // Segarkan juga tiap tab admin kembali fokus.
+    const onFocus = () => reload(true);
+    window.addEventListener('focus', onFocus);
+    return () => {
+      cancelled = true;
+      clearInterval(poll);
+      window.removeEventListener('focus', onFocus);
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   const addApplicant = async (member) => {
@@ -129,6 +152,19 @@ export default function App() {
     }
   };
 
+  const manualRefresh = async () => {
+    if (!SUPABASE_READY) return;
+    try {
+      const rows = await fetchApplicants();
+      setApplicants(rows);
+      setDbOnline(true);
+      notify('Data berhasil disegarkan dari database.', 'success');
+    } catch (err) {
+      console.error('[supabase] refresh gagal:', err.message);
+      notify('Gagal memuat ulang: ' + err.message, 'error');
+    }
+  };
+
   const changePaymentStatus = async (id, statusBayar) => {
     setApplicants((prev) => prev.map((a) => (a.id !== id ? a : { ...a, statusBayar })));
     notify(`Pembayaran ${id} ditandai: ${statusBayar === 'Lunas' ? 'LUNAS ✓' : 'Belum Lunas'}`, statusBayar === 'Lunas' ? 'success' : 'info');
@@ -172,6 +208,7 @@ export default function App() {
             onChangePaymentStatus={changePaymentStatus}
             onDeleteApplicant={removeApplicant}
             onEditApplicant={editApplicant}
+            onRefresh={manualRefresh}
             notify={notify}
             onPreviewHp={() => {
               window.location.href = '/daftar';

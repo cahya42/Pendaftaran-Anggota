@@ -1,4 +1,4 @@
-export default function AdminToolbar({ search, setSearch, statusFilter, setStatusFilter, onExport, onPrintList }) {
+export default function AdminToolbar({ search, setSearch, statusFilter, setStatusFilter, onExport, onPrintList, onRefresh, refreshing }) {
   return (
     <div className="p-5 sm:p-6 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
@@ -18,6 +18,9 @@ export default function AdminToolbar({ search, setSearch, statusFilter, setStatu
           <option value="Disetujui">Disetujui</option>
           <option value="Ditolak">Ditolak</option>
         </select>
+        <button type="button" onClick={onRefresh} disabled={refreshing} title="Muat ulang data terbaru dari database" className="cursor-pointer px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 shadow-sm transition disabled:opacity-60">
+          <i className={`fa-solid fa-rotate-right ${refreshing ? 'fa-spin' : ''}`}></i><span>{refreshing ? 'Memuat...' : 'Segarkan'}</span>
+        </button>
         <button type="button" onClick={onPrintList} className="cursor-pointer px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition">
           <i className="fa-solid fa-print text-tjokro-accentgold"></i><span>Cetak Daftar</span>
         </button>

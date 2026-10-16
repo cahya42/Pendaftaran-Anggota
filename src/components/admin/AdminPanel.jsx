@@ -22,13 +22,14 @@ function doPrint(mode) {
   window.print();
 }
 
-export default function AdminPanel({ applicants, onChangeStatus, onChangePaymentStatus, onDeleteApplicant, onEditApplicant, notify, onPreviewHp }) {
+export default function AdminPanel({ applicants, onChangeStatus, onChangePaymentStatus, onDeleteApplicant, onEditApplicant, onRefresh, notify, onPreviewHp }) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('ALL');
   const [detailId, setDetailId] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [eventTag, setEventTag] = useState('EVENT-PURWAKARTA-ISTIMEWA');
   const [officer, setOfficer] = useState('Pengurus Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA');
   const [printDetailData, setPrintDetailData] = useState(null);
@@ -99,6 +100,16 @@ export default function AdminPanel({ applicants, onChangeStatus, onChangePayment
     requestAnimationFrame(() => doPrint('detail'));
   };
 
+  const handleRefresh = async () => {
+    if (refreshing || !onRefresh) return;
+    setRefreshing(true);
+    try {
+      await onRefresh();
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   return (
     <section className="space-y-7">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -109,7 +120,7 @@ export default function AdminPanel({ applicants, onChangeStatus, onChangePayment
       </div>
       <QrStandee eventTag={eventTag} setEventTag={setEventTag} officer={officer} setOfficer={setOfficer} onPreviewHp={onPreviewHp} notify={notify} />
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-        <AdminToolbar search={search} setSearch={setSearch} statusFilter={filter} setStatusFilter={setFilter} onExport={onExport} onPrintList={onPrintList} />
+        <AdminToolbar search={search} setSearch={setSearch} statusFilter={filter} setStatusFilter={setFilter} onExport={onExport} onPrintList={onPrintList} onRefresh={handleRefresh} refreshing={refreshing} />
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50 text-slate-600 uppercase font-bold border-b border-slate-200 text-[11px]">

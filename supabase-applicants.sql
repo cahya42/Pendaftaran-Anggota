@@ -67,3 +67,17 @@ drop policy if exists "public delete applicants" on public.applicants;
 create policy "public delete applicants"
   on public.applicants for delete
   using (true);
+
+-- BARU: aktifkan realtime agar panel admin update otomatis tanpa refresh.
+-- Jalankan sekali di SQL Editor (aman dijalankan berulang).
+-- Catatan: kalau dapat error "publication already includes table",
+-- berarti tabel sudah masuk publication — abaikan saja.
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'applicants'
+  ) then
+    alter publication supabase_realtime add table public.applicants;
+  end if;
+end $$;

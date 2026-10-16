@@ -70,6 +70,29 @@ export async function fetchApplicants() {
   return (data || []).map(rowToApplicant);
 }
 
+// Langganan realtime: setiap ada INSERT/UPDATE/DELETE di tabel applicants,
+// panggil ulang fetch agar panel admin selalu segar tanpa refresh manual.
+// Kembalikan fungsi unsubscribe untuk dipanggil saat komponen dilepas.
+export function subscribeApplicants(onChange) {
+  const channel = supabase
+    .channel('applicants-realtime')
+    .on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, () => {
+      try {
+        onChange?.();
+      } catch (e) {
+        console.error('[supabase] realtime handler gagal:', e?.message || e);
+      }
+    })
+    .subscribe();
+  return () => {
+    try {
+      supabase.removeChannel(channel);
+    } catch {
+      /* abaikan */
+    }
+  };
+}
+
 export async function insertApplicant(applicant) {
   // Tahan terhadap tabel lama yang belum punya kolom baru:
   // kalau Supabase protes "Could not find the 'xxx' column",
