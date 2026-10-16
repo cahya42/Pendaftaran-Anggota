@@ -22,14 +22,19 @@
 }
 
 @media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
   body * {
     visibility: hidden !important;
   }
-  #print-qr-target,
-  #print-qr-target * {
+  /* Mode 1: cetak standee QR */
+  body.print-mode-qr #print-qr-target,
+  body.print-mode-qr #print-qr-target * {
     visibility: visible !important;
   }
-  #print-qr-target {
+  body.print-mode-qr #print-qr-target {
     position: absolute;
     left: 50% !important;
     top: 20px !important;
@@ -37,5 +42,124 @@
     width: 100% !important;
     max-width: 420px !important;
     display: block !important;
+  }
+  /* Mode 2: cetak daftar pendaftar */
+  body.print-mode-list #print-applicant-list,
+  body.print-mode-list #print-applicant-list * {
+    visibility: visible !important;
+  }
+  body.print-mode-list #print-applicant-list {
+    position: absolute;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    display: block !important;
+  }
+  /* Mode 3: cetak formulir satu anggota */
+  body.print-mode-detail #print-applicant-detail,
+  body.print-mode-detail #print-applicant-detail * {
+    visibility: visible !important;
+  }
+  body.print-mode-detail #print-applicant-detail {
+    position: absolute;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    display: block !important;
+  }
+}
+
+/* Lembar cetak hanya tampil di layar sebagai pratinjau tersembunyi */
+.print-area {
+  display: none;
+}
+
+@media print {
+  .print-area {
+    display: block !important;
+    color: #000;
+    font-size: 11px;
+    background: #fff;
+  }
+  .print-kop {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 3px double #0b5336;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+  .print-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+  }
+  .print-kop-text h1 {
+    font-size: 16px;
+    font-weight: 900;
+    color: #073824;
+    margin: 0;
+  }
+  .print-kop-text p {
+    font-size: 10px;
+    color: #444;
+    margin: 2px 0 0;
+  }
+  .print-kop-text h2 {
+    font-size: 13px;
+    font-weight: 800;
+    margin: 6px 0 0;
+    text-decoration: underline;
+  }
+  .print-sub {
+    font-size: 10px;
+  }
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+  }
+  .print-table th,
+  .print-table td {
+    border: 1px solid #333;
+    padding: 5px 6px;
+    vertical-align: top;
+  }
+  .print-table thead th {
+    background: #eaf6f0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-sign-col {
+    min-width: 90px;
+  }
+  .print-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .print-detail-table td {
+    padding: 4px 6px;
+    vertical-align: top;
+  }
+  .print-label {
+    width: 200px;
+    font-weight: 700;
+  }
+  .print-sep {
+    width: 14px;
+  }
+  .print-sign-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 26px;
+    font-size: 11px;
+  }
+  .print-sign-box {
+    width: 45%;
+  }
+  .print-sign-space {
+    height: 64px;
   }
 }

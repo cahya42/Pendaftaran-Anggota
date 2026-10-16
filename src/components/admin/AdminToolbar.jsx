@@ -1,4 +1,4 @@
-export default function AdminToolbar({ search, setSearch, statusFilter, setStatusFilter, onExport }) {
+export default function AdminToolbar({ search, setSearch, statusFilter, setStatusFilter, onExport, onPrintList }) {
   return (
     <div className="p-5 sm:p-6 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
@@ -18,6 +18,9 @@ export default function AdminToolbar({ search, setSearch, statusFilter, setStatu
           <option value="Disetujui">Disetujui</option>
           <option value="Ditolak">Ditolak</option>
         </select>
+        <button onClick={onPrintList} className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition">
+          <i className="fa-solid fa-print text-tjokro-accentgold"></i><span>Cetak Daftar</span>
+        </button>
         <button onClick={onExport} className="px-3.5 py-2 rounded-xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs flex items-center gap-1.5 shadow-sm">
           <i className="fa-solid fa-file-excel text-tjokro-accentgold"></i><span>Ekspor Excel/CSV</span>
         </button>

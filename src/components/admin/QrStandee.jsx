@@ -55,9 +55,7 @@ export default function QrStandee({ eventTag, setEventTag, officer, setOfficer, 
         <div className="lg:col-span-5 flex justify-center">
           <div id="print-qr-target" className="bg-white text-slate-900 p-6 rounded-3xl shadow-2xl max-w-xs w-full text-center border-4 border-tjokro-gold">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-full bg-tjokro-green text-tjokro-accentgold flex items-center justify-center text-sm font-black">
-                <i className="fa-solid fa-handshake-angle"></i>
-              </div>
+              <img src="logo-koperasi.png" alt="Logo Koperasi HOS Tjokroaminoto" className="w-10 h-10 object-contain rounded-full bg-white" />
               <div className="text-left">
                 <span className="block font-black text-[11px] text-tjokro-darkgreen leading-tight">KOP. KONSUMEN</span>
                 <span className="block font-black text-xs text-tjokro-gold leading-tight">HOS TJOKROAMINOTO</span>

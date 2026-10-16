@@ -1,6 +1,6 @@
 import { formatRupiah } from '../../utils/helpers.js';
 
-export default function ApplicantModal({ applicant, onClose, onChangeStatus }) {
+export default function ApplicantModal({ applicant, onClose, onChangeStatus, onPrintDetail }) {
   if (!applicant) return null;
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
@@ -48,8 +48,11 @@ export default function ApplicantModal({ applicant, onClose, onChangeStatus }) {
             </div>
           </div>
         </div>
-        <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2.5">
+        <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2.5 flex-wrap">
           <button onClick={onClose} className="px-4 py-2 rounded-xl border border-slate-300 font-bold text-xs text-slate-600 hover:bg-slate-200 transition">Tutup</button>
+          <button onClick={() => onPrintDetail(applicant)} className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs transition flex items-center gap-1.5">
+            <i className="fa-solid fa-print text-tjokro-accentgold"></i> Cetak Formulir
+          </button>
           {applicant.status !== 'Disetujui' && (
             <button onClick={() => onChangeStatus(applicant.id, 'Disetujui')} className="px-5 py-2 rounded-xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs transition flex items-center gap-1.5 shadow-md shadow-tjokro-green/20">
               <i className="fa-solid fa-check text-tjokro-accentgold"></i> Setujui &amp; Terbitkan NIA
