@@ -29,10 +29,16 @@ create table if not exists public.applicants (
   created_at timestamptz not null default now()
 );
 
--- Jika tabel sudah dibuat SEBELUM fitur ini, jalankan perintah berikut sekali:
--- alter table public.applicants add column if not exists simpanan_sukarela integer not null default 0;
--- alter table public.applicants add column if not exists bukti_bayar_url text;
--- alter table public.applicants add column if not exists status_bayar text not null default 'Belum';
+-- Jika tabel sudah dibuat SEBELUM fitur ini, jalankan perintah berikut sekali
+-- (SUDAH DIAKTIFKAN — aman dijalankan berulang karena IF NOT EXISTS):
+alter table public.applicants add column if not exists simpanan_sukarela integer not null default 0;
+alter table public.applicants add column if not exists bukti_bayar_url text;
+alter table public.applicants add column if not exists status_bayar text not null default 'Belum';
+alter table public.applicants add column if not exists ktp_url text;
+alter table public.applicants add column if not exists selfie_url text;
+alter table public.applicants add column if not exists ttd_url text;
+alter table public.applicants add column if not exists metode text;
+alter table public.applicants add column if not exists tanggal_daftar text;
 
 -- Izinkan anon key membaca/menulis (formulir publik).
 -- Catatan: anon key BOLEH terekspos di frontend, tapi atur RLS

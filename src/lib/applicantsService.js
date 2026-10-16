@@ -3,12 +3,14 @@ import { supabase } from './supabase.js';
 const TABLE = 'applicants';
 
 // DB (snake_case) -> App (camelCase)
+// Dibuat toleran: kalau kolom belum ada di DB (tabel lama),
+// pakai nilai default agar fetch tidak crash.
 export function rowToApplicant(row) {
   if (!row) return null;
   return {
     // id unik internal (uuid dari supabase) — dipakai sebagai key React
-    _key: row.id,
-    id: row.reg_no,
+    _key: row.id ?? row.reg_no,
+    id: row.reg_no ?? row.id,
     nia: row.nia || '-',
     nama: row.nama,
     nik: row.nik,
@@ -69,13 +71,29 @@ export async function fetchApplicants() {
 }
 
 export async function insertApplicant(applicant) {
-  const { data, error } = await supabase
-    .from(TABLE)
-    .insert(applicantToRow(applicant))
-    .select();
-  if (error) throw error;
-  const row = (data || [])[0];
-  return row ? rowToApplicant(row) : null;
+  // Tahan terhadap tabel lama yang belum punya kolom baru:
+  // kalau Supabase protes "Could not find the 'xxx' column",
+  // buang kolom itu dari payload lalu coba lagi.
+  let payload = applicantToRow(applicant);
+  for (let attempt = 0; attempt < 12; attempt++) {
+    const { data, error } = await supabase
+      .from(TABLE)
+      .insert(payload)
+      .select();
+    if (!error) {
+      const row = (data || [])[0];
+      return row ? rowToApplicant(row) : null;
+    }
+    const m = String(error.message || '').match(/Could not find the '([^']+)' column/i);
+    if (m && m[1] && m[1] in payload) {
+      console.warn(`[supabase] kolom ${m[1]} belum ada di tabel, dicoba tanpa kolom itu...`);
+      const { [m[1]]: _dropped, ...rest } = payload;
+      payload = rest;
+      continue;
+    }
+    throw error;
+  }
+  throw new Error('Insert gagal setelah retry tanpa kolom baru.');
 }
 
 export async function updateApplicantStatus(regNo, status, nia = null) {
