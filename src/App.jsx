@@ -67,7 +67,9 @@ export default function App() {
 
   const changeStatus = async (id, status) => {
     const target = applicants.find((a) => a.id === id);
-    const nia = status === 'Disetujui' && target && (target.nia === '-' || !target.nia) ? generateNia() : target?.nia;
+    const needNia = status === 'Disetujui' && target && (target.nia === '-' || !target.nia);
+    // NIA = HC-PWK-YYXXXX (tahun+urutan digabung), urut dari 0001 per tahun berdasarkan data yang ada.
+    const nia = needNia ? generateNia(applicants) : target?.nia;
     setApplicants((prev) => prev.map((a) => (a.id !== id ? a : { ...a, status, nia: nia || a.nia })));
     if (!dbOnline) {
       notify(status === 'Disetujui' ? `Pendaftar disetujui! NIA: ${nia}` : `Status diubah menjadi ${status}`, status === 'Disetujui' ? 'success' : 'info');

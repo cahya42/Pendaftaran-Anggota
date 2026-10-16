@@ -17,7 +17,7 @@ export const DAFTAR_PEKERJAAN = [
 export const INITIAL_APPLICANTS = [
   {
     id: 'REG-2026-0012',
-    nia: 'NIA-PWK-260012',
+    nia: 'HC-PWK-260001',
     nama: 'Ahmad Fauzi Ridwan',
     nik: '3214011504880003',
     ttl: 'Purwakarta, 15 April 1988',
