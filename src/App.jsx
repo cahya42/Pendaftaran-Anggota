@@ -68,7 +68,7 @@ export default function App() {
   const changeStatus = async (id, status) => {
     const target = applicants.find((a) => a.id === id);
     const needNia = status === 'Disetujui' && target && (target.nia === '-' || !target.nia);
-    // NIA = HC-PWK-YYXXXX (tahun+urutan digabung), urut dari 0001 per tahun berdasarkan data yang ada.
+    // NIA = HC-PWK-YYXXXX (tahun+urutan digabung), pertama 0001; celah bekas hapus dipakai ulang.
     const nia = needNia ? generateNia(applicants) : target?.nia;
     setApplicants((prev) => prev.map((a) => (a.id !== id ? a : { ...a, status, nia: nia || a.nia })));
     if (!dbOnline) {

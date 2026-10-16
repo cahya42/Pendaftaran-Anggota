@@ -13,12 +13,13 @@ export function generateRegId() {
 
 export function generateNia(existing = [], date = new Date()) {
   // Format: HC-PWK-YYXXXX (2 digit tahun + 4 digit urutan digabung, tanpa strip)
-  // Contoh: HC-PWK-260000, HC-PWK-260001. Anggota pertama = 0000, lalu 0001, dst.
+  // Contoh: HC-PWK-260001, HC-PWK-260002. Anggota pertama = 0001.
+  // Nomor terkecil yang BELUM dipakai (celah bekas hapus dipakai ulang).
   const yy = String(date.getFullYear()).slice(-2).padStart(2, '0');
-  let max = -1;
-  let found = false;
+  const norm = (s) => String(s || '').trim().toUpperCase();
+  const used = new Set();
   for (const a of existing || []) {
-    const nia = String(a?.nia || '').trim();
+    const nia = norm(a?.nia);
     // Format baru: HC-PWK-260001
     let m = nia.match(/^HC-PWK-(\d{2})(\d{4})\s*$/);
     // Kompatibel format lama: HC-PWK-26-0001
@@ -26,12 +27,10 @@ export function generateNia(existing = [], date = new Date()) {
       const mOld = nia.match(/^HC-PWK-(\d{2})-(\d{4})\s*$/);
       if (mOld) m = [mOld[0], mOld[1], mOld[2]];
     }
-    if (m && m[1] === yy) {
-      found = true;
-      max = Math.max(max, parseInt(m[2], 10) || 0);
-    }
+    if (m && m[1] === yy) used.add(parseInt(m[2], 10));
   }
-  const next = found ? max + 1 : 0;
+  let next = 1;
+  while (used.has(next)) next += 1;
   return `HC-PWK-${yy}${String(next).padStart(4, '0')}`;
 }
 

@@ -134,6 +134,7 @@ export async function deleteApplicant(regNo) {
 const EDITABLE_MAP = {
   nama: 'nama',
   nik: 'nik',
+  nia: 'nia',
   ttl: 'ttl',
   gender: 'gender',
   pekerjaan: 'pekerjaan',

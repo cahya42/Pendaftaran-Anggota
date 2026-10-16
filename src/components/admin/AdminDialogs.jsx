@@ -49,6 +49,7 @@ export function DeleteConfirmDialog({ applicant, busy, onCancel, onConfirm }) {
 const EDIT_FIELDS = [
   { key: 'nama', label: 'Nama Lengkap Sesuai KTP', type: 'text' },
   { key: 'nik', label: 'NIK (16 digit)', type: 'text' },
+  { key: 'nia', label: 'NIA (mis. HC-PWK-260001)', type: 'text' },
   { key: 'ttl', label: 'Tempat, Tanggal Lahir', type: 'text' },
   { key: 'gender', label: 'Jenis Kelamin', type: 'select', options: ['Laki-laki', 'Perempuan'] },
   { key: 'pekerjaan', label: 'Pekerjaan', type: 'text' },
@@ -68,6 +69,7 @@ export function EditApplicantDialog({ applicant, busy, onCancel, onSave }) {
       setDraft({
         nama: applicant.nama || '',
         nik: applicant.nik || '',
+        nia: applicant.nia === '-' ? '' : applicant.nia || '',
         ttl: applicant.ttl || '',
         gender: applicant.gender || 'Laki-laki',
         pekerjaan: applicant.pekerjaan || '',
@@ -92,6 +94,7 @@ export function EditApplicantDialog({ applicant, busy, onCancel, onSave }) {
       ...draft,
       nama: String(draft.nama).trim(),
       nik: String(draft.nik).trim(),
+      nia: String(draft.nia || '').trim().toUpperCase() || '-',
       email: String(draft.email).trim() || '-',
       simpananWajib: Number(draft.simpananWajib) || 0,
       simpananSukarela: Number(draft.simpananSukarela) || 0,
