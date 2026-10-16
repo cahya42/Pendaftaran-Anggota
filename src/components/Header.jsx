@@ -26,23 +26,23 @@ export default function Header({ view, onSwitch }) {
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-tjokro-green/15 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <div className="flex items-center space-x-3.5">
+        <div className="flex items-center justify-between h-20 sm:h-auto">
+          <div className="flex items-center space-x-2.5 sm:space-x-4 flex-wrap min-w-0">
             <LogoEmblem />
-            <div>
+            <div className="min-w-0 flex flex-col sm:flex-row sm:items-center">
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base sm:text-lg text-tjokro-darkgreen tracking-tight leading-snug">
+                <span className="font-extrabold text-xs sm:text-base sm:leading-tight text-tjokro-darkgreen tracking-tight leading-none truncate sm:truncate">
                   KOPERASI KONSUMEN HOS TJOKROAMINOTO
                 </span>
               </div>
-              <p className="text-xs font-semibold text-tjokro-gold flex items-center gap-1.5">
+              <p className="text-[10px] sm:text-xs font-semibold text-tjokro-gold flex items-center gap-1 leading-none mt-0.5 sm:mt-0">
                 <span>PURWAKARTA ISTIMEWA</span>
-                <span className="text-slate-300">&bull;</span>
+                <span className="text-slate-300 hidden sm:inline">&bull;</span>
                 <span className="hidden sm:inline text-slate-500 font-normal italic">&quot;Bersama Membangun, Sejahtera Bersama&quot;</span>
               </p>
             </div>
           </div>
-          <div className="flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200 shadow-inner">
+          <div className="flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200 shadow-inner flex-shrink-0">
             <button onClick={() => onSwitch('member')} className={view === 'member' ? btnActive : btnIdle}>
               <i className="fa-solid fa-qrcode text-tjokro-accentgold"></i>
               <span className="hidden sm:inline">Formulir Calon Anggota</span>
