@@ -1,9 +1,7 @@
-export const SIMPANAN_POKOK = 100000;
+export const SIMPANAN_POKOK = 25000;
 
 export const PILIHAN_WAJIB = [
-  { value: 25000, label: 'Rp 25.000 / bln' },
-  { value: 50000, label: 'Rp 50.000 / bln (Direkomendasikan)' },
-  { value: 100000, label: 'Rp 100.000 / bln' },
+  { value: 10000, label: 'Rp 10.000 / bln' },
 ];
 
 export const DAFTAR_PEKERJAAN = [
@@ -28,8 +26,8 @@ export const INITIAL_APPLICANTS = [
     hp: '081223344556',
     email: 'ahmad.fauzi@gmail.com',
     alamat: 'Jl. Veteran No. 28, Nagri Kaler, Purwakarta',
-    simpananPokok: 100000,
-    simpananWajib: 50000,
+    simpananPokok: 25000,
+    simpananWajib: 10000,
     metode: 'QRIS',
     status: 'Disetujui',
     tanggalDaftar: '11 Okt 2026',
@@ -48,8 +46,8 @@ export const INITIAL_APPLICANTS = [
     hp: '087788991122',
     email: 'siti.nurhaliza@gmail.com',
     alamat: 'Desa Cibatu, Kec. Cibatu, Purwakarta',
-    simpananPokok: 100000,
-    simpananWajib: 50000,
+    simpananPokok: 25000,
+    simpananWajib: 10000,
     metode: 'QRIS',
     status: 'Menunggu',
     tanggalDaftar: '12 Okt 2026',
@@ -68,8 +66,8 @@ export const INITIAL_APPLICANTS = [
     hp: '085299887766',
     email: '-',
     alamat: 'Desa Pasawahan Kidul, Pasawahan',
-    simpananPokok: 100000,
-    simpananWajib: 25000,
+    simpananPokok: 25000,
+    simpananWajib: 10000,
     metode: 'Transfer Bank / Kasir',
     status: 'Menunggu',
     tanggalDaftar: '12 Okt 2026',
@@ -88,8 +86,8 @@ export const INITIAL_APPLICANTS = [
     hp: '089612345678',
     email: '-',
     alamat: 'Kecamatan Jatiluhur, Purwakarta',
-    simpananPokok: 100000,
-    simpananWajib: 50000,
+    simpananPokok: 25000,
+    simpananWajib: 10000,
     metode: 'QRIS',
     status: 'Ditolak',
     tanggalDaftar: '10 Okt 2026',

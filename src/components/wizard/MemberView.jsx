@@ -20,7 +20,7 @@ const EMPTY_FORM = {
   alamat: '',
   ktpPreview: '',
   selfiePreview: '',
-  simpananWajib: 50000,
+  simpananWajib: 10000,
   metode: 'QRIS',
   agreed: false,
 };
@@ -64,7 +64,7 @@ export default function MemberView({ onAddApplicant, notify }) {
     }
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (!form.agreed) {
       notify('Centang persetujuan AD/ART Koperasi HOS Tjokroaminoto', 'error');
       return;
@@ -96,8 +96,9 @@ export default function MemberView({ onAddApplicant, notify }) {
       selfieUrl: form.selfiePreview,
       ttdUrl: signatureData,
     };
-    onAddApplicant(newMember);
-    setTicket({ id: regId, nama: form.nama, nik: form.nik, tanggalDaftar: today });
+    const saved = await onAddApplicant(newMember);
+    const finalId = saved?.id || regId;
+    setTicket({ id: finalId, nama: form.nama, nik: form.nik, tanggalDaftar: today });
     notify('Pendaftaran Anda berhasil tercatat di Koperasi HOS Tjokroaminoto!', 'success');
   };
 

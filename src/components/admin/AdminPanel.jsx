@@ -4,11 +4,11 @@ import ApplicantModal from './ApplicantModal.jsx';
 import StatCard from './AdminStats.jsx';
 import AdminToolbar from './AdminToolbar.jsx';
 import { ApplicantRows } from './ApplicantRows.jsx';
-import { exportApplicantsToCSV, generateNia } from '../../utils/helpers.js';
+import { exportApplicantsToCSV } from '../../utils/helpers.js';
 
 const HEADERS = ['No. Registrasi', 'Calon Anggota', 'Kontak WhatsApp', 'Pekerjaan', 'Komitmen Setoran', 'Status & NIA', 'Aksi'];
 
-export default function AdminPanel({ applicants, setApplicants, notify, onPreviewHp }) {
+export default function AdminPanel({ applicants, onChangeStatus, notify, onPreviewHp }) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('ALL');
   const [detailId, setDetailId] = useState(null);
@@ -23,9 +23,8 @@ export default function AdminPanel({ applicants, setApplicants, notify, onPrevie
   });
 
   const changeStatus = (id, status) => {
-    setApplicants((prev) => prev.map((a) => (a.id !== id ? a : { ...a, status, nia: status === 'Disetujui' && a.nia === '-' ? generateNia() : a.nia })));
     setDetailId(null);
-    notify(status === 'Disetujui' ? 'Pendaftar disetujui & NIA diterbitkan!' : `Status diubah menjadi ${status}`, status === 'Disetujui' ? 'success' : 'info');
+    onChangeStatus(id, status);
   };
 
   const onExport = () => {
