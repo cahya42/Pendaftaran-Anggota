@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perekrutan Anggota - Koperasi Konsumen HOS TJOKROAMINOTO</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- QRCode.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Theme Setup -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Cinzel"', 'serif'],
+          },
+          colors: {
+            tjokro: {
+              green: '#0b5336',
+              darkgreen: '#073824',
+              lightgreen: '#127a50',
+              mint: '#eaf6f0',
+              gold: '#d97706',
+              amber: '#b45309',
+              lightgold: '#fef3c7',
+              accentgold: '#f59e0b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Styling scrollbars & signatures */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    #signature-canvas {
+      touch-action: none;
+    }
+    /* ===== Mode cetak (ditambahkan via class di <body>) ===== */
+    #print-sheet { display: none; }
+    @media print {
+      @page { size: A4; margin: 1cm; }
+      body * { visibility: hidden !important; }
+      body.print-mode-qr #print-qr-target, body.print-mode-qr #print-qr-target * { visibility: visible !important; }
+      body.print-mode-qr #print-qr-target {
+        position: absolute; left: 50% !important; top: 1cm !important;
+        transform: translateX(-50%) !important; width: 190mm !important;
+        height: 277mm !important; display: block !important;
+        max-width: none !important;
+      }
+      body.print-mode-list #print-sheet, body.print-mode-list #print-sheet * { visibility: visible !important; }
+      body.print-mode-list #print-sheet { position: absolute; left: 0 !important; top: 0 !important; width: 100% !important; display: block !important; }
+      body.print-mode-detail #print-sheet, body.print-mode-detail #print-sheet * { visibility: visible !important; }
+      body.print-mode-detail #print-sheet { position: absolute; left: 0 !important; top: 0 !important; width: 100% !important; display: block !important; }
+      #print-sheet { color: #000; font-size: 11px; background: #fff; }
+      .print-kop { display: flex; align-items: center; gap: 12px; border-bottom: 3px double #0b5336; padding-bottom: 10px; margin-bottom: 12px; }
+      .print-kop img { width: 64px; height: 64px; object-fit: contain; }
+      .print-kop h1 { font-size: 16px; font-weight: 900; color: #073824; margin: 0; }
+      .print-kop p { font-size: 10px; color: #444; margin: 2px 0 0; }
+      .print-kop h2 { font-size: 13px; font-weight: 800; margin: 6px 0 0; text-decoration: underline; }
+      .print-table { width: 100%; border-collapse: collapse; font-size: 10px; margin-top: 6px; }
+      .print-table th, .print-table td { border: 1px solid #333; padding: 5px 6px; vertical-align: top; }
+      .print-table thead th { background: #eaf6f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .print-detail-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 4px; }
+      .print-detail-table td { padding: 4px 6px; vertical-align: top; }
+      .print-label { width: 200px; font-weight: 700; }
+      .print-sep { width: 14px; }
+      .print-sign-row { display: flex; justify-content: space-between; margin-top: 26px; font-size: 11px; }
+      .print-sign-box { width: 45%; }
+      .print-sign-space { height: 64px; }
+    }
+  </style>
+</head>
+
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen antialiased flex flex-col selection:bg-tjokro-green selection:text-white">
+
+  <!-- Header Bar -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-tjokro-green/15 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col items-start gap-3 w-full">
+        
+        <!-- Baris 1: Logo + Judul + Subtitel di samping -->
+        <div class="flex items-center gap-2 sm:gap-3 w-full">
+          <div class="flex-shrink-0">
+            <div class="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
+            <svg class="w-full h-full drop-shadow-md" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="100" cy="100" r="96" fill="#FFFFFF" stroke="#0b5336" stroke-width="7"/>
+              <circle cx="100" cy="100" r="88" stroke="#d97706" stroke-width="3" stroke-dasharray="2 1"/>
+              <circle cx="100" cy="100" r="62" fill="#0b5336" fill-opacity="0.08" stroke="#0b5336" stroke-width="2"/>
+              <!-- Purwakarta outline representation -->
+              <path d="M75 75 Q90 60 110 65 Q130 70 135 85 Q140 105 125 120 Q110 135 85 130 Q65 125 65 105 Q65 85 75 75 Z" fill="#f59e0b" stroke="#b45309" stroke-width="3"/>
+              <!-- Gear (Industri/Karya) -->
+              <circle cx="100" cy="132" r="14" fill="#d97706" stroke="#073824" stroke-width="2"/>
+              <circle cx="100" cy="132" r="6" fill="#FFFFFF"/>
+              <!-- Bridge / Gate icon right -->
+              <path d="M142 98 L142 118 M154 98 L154 118 M138 104 Q148 98 158 104" stroke="#0b5336" stroke-width="3" stroke-linecap="round"/>
+              <!-- Sate Maranggi icon left -->
+              <ellipse cx="50" cy="112" rx="10" ry="4" fill="#b45309"/>
+              <circle cx="45" cy="104" r="3" fill="#0b5336"/>
+              <circle cx="51" cy="102" r="3.5" fill="#f59e0b"/>
+              <circle cx="56" cy="104" r="3" fill="#0b5336"/>
+              <!-- Rice leaves bottom -->
+              <path d="M68 145 C80 155 95 155 100 155 C105 155 120 155 132 145" stroke="#0b5336" stroke-width="4" stroke-linecap="round"/>
+              <!-- Arc Top Text -->
+              <path id="textArcHeader" d="M 30,100 A 70,70 0 1,1 170,100" fill="none"/>
+              <text font-size="12" font-weight="900" fill="#0b5336" letter-spacing="1.5">
+                <textPath href="#textArcHeader" startOffset="50%" text-anchor="middle">
+                  HOS TJOKROAMINOTO
+                </textPath>
+              </text>
+            </svg>
+          </div>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="font-extrabold text-xs sm:text-base text-tjokro-darkgreen tracking-tight leading-none truncate sm:truncate">
+            KOPERASI KONSUMEN HOS TJOKROAMINOTO
+          </span>
+          <span class="text-[10px] sm:text-xs font-semibold text-tjokro-gold mt-0.5 leading-none">
+            PURWAKARTA ISTIMEWA
+          </span>
+        </div>
+
+        <!-- Baris 2: Tagline di bawah -->
+        <p class="text-[10px] sm:text-xs font-semibold text-tjokro-gold flex items-center gap-1 w-full">
+          <span class="hidden sm:inline">&quot;Bersama Membangun, Sejahtera Bersama&quot;</span>
+          <span class="sm:hidden block">&quot;Bersama Membangun, Sejahtera Bersama&quot;</span>
+        </p>
+
+        <!-- Baris 3: 2 tombol sejajar di bawah tagline -->
+        <div class="flex gap-2 w-full">
+          <button id="nav-btn-member" onclick="switchMainView('member')" class="flex items-center justify-center gap-2 px-3 py-1.5 text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm bg-tjokro-green text-white flex-1">
+            <i class="fa-solid fa-qrcode text-tjokro-accentgold"></i>
+            <span class="hidden sm:inline">Formulir Calon Anggota</span>
+            <span class="sm:inline-block sm:hidden">Form QR</span>
+          </button>
+          <button id="nav-btn-admin" onclick="switchMainView('admin')" class="flex items-center justify-center gap-2 px-3 py-1.5 text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm border border-slate-200 text-slate-600 hover:text-slate-900 flex-1">
+            <i class="fa-solid fa-users-gear text-xs"></i>
+            <span class="hidden sm:inline">Panel Pengurus</span>
+            <span class="sm:inline-block sm:hidden">Admin</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Notice Banner on Mobile -->
+  <div class="bg-tjokro-mint border-b border-tjokro-green/10 px-4 py-2 sm:hidden text-center text-[11px] font-semibold text-tjokro-darkgreen">
+    <i class="fa-solid fa-bullhorn text-tjokro-gold mr-1.5"></i> "Bersama Membangun, Sejahtera Bersama"
+  </div>
+
+  <main class="flex-1 py-6 sm:py-9 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+
+    <!-- ============================================================== -->
+    <!-- VIEW 1: TAMPILAN CALON ANGGOTA (SCAN QR DI HP)                 -->
+    <!-- ============================================================== -->
+    <section id="view-member" class="block max-w-2xl mx-auto">
+      
+      <!-- Stepper Progress Header Card -->
+      <div id="wizard-progress-card" class="bg-white rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200/80 mb-6 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-tjokro-green via-tjokro-lightgreen to-tjokro-accentgold"></div>
+        
+        <div class="flex items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div>
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-widest text-tjokro-gold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+              <i class="fa-solid fa-id-card-clip"></i> Formulir Rekrutmen Anggota Baru
+            </span>
+            <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-1">Pendaftaran Anggota Koperasi</h1>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-semibold text-slate-500">Tahap</span>
+            <div class="text-lg font-black text-tjokro-green leading-none"><span id="current-step-text">1</span><span class="text-slate-400 font-medium text-xs">/4</span></div>
+          </div>
+        </div>
+
+        <!-- 4 Step Icons Indicator -->
+        <div class="mt-5">
+          <div class="grid grid-cols-4 gap-2 text-center text-xs font-bold">
+            <!-- Step 1 -->
+            <div id="step-ind-1" class="step-indicator flex flex-col items-center">
+              <div class="w-9 h-9 rounded-2xl flex items-center justify-center text-xs mb-1.5 transition-all bg-tjokro-green text-white shadow-md ring-4 ring-tjokro-mint">1</div>
+              <span class="text-tjokro-darkgreen text-[11px] sm:text-xs">Data Pribadi</span>
+            </div>
+            <!-- Step 2 -->
+            <div id="step-ind-2" class="step-indicator flex flex-col items-center opacity-40">
+              <div class="w-9 h-9 rounded-2xl flex items-center justify-center text-xs mb-1.5 transition-all bg-slate-200 text-slate-600">2</div>
+              <span class="text-slate-600 text-[11px] sm:text-xs">Dokumen</span>
+            </div>
+            <!-- Step 3 -->
+            <div id="step-ind-3" class="step-indicator flex flex-col items-center opacity-40">
+              <div class="w-9 h-9 rounded-2xl flex items-center justify-center text-xs mb-1.5 transition-all bg-slate-200 text-slate-600">3</div>
+              <span class="text-slate-600 text-[11px] sm:text-xs">Simpanan</span>
+            </div>
+            <!-- Step 4 -->
+            <div id="step-ind-4" class="step-indicator flex flex-col items-center opacity-40">
+              <div class="w-9 h-9 rounded-2xl flex items-center justify-center text-xs mb-1.5 transition-all bg-slate-200 text-slate-600">4</div>
+              <span class="text-slate-600 text-[11px] sm:text-xs">Tanda Tangan</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar Line -->
+          <div class="w-full bg-slate-100 h-2 rounded-full mt-4 overflow-hidden">
+            <div id="stepper-progress-bar" class="h-full bg-gradient-to-r from-tjokro-green to-tjokro-accentgold transition-all duration-300 rounded-full" style="width: 25%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wizard Form -->
+      <form id="membership-form" onsubmit="event.preventDefault();" class="space-y-6">
+
+        <!-- STEP 1: Data Identitas & Kontak -->
+        <div id="step-content-1" class="step-page bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-5">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-tjokro-mint text-tjokro-green flex items-center justify-center text-xs">
+                <i class="fa-solid fa-user"></i>
+              </span>
+              Identitas Calon Anggota (Sesuai KTP)
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">Data Anda tersimpan secara aman dan terenkripsi untuk keperluan legalitas koperasi.</p>
+          </div>
+
+          <div class="space-y-4">
+            <!-- NIK -->
+            <div>
+              <label for="nik" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                Nomor Induk Kependudukan (NIK) <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                  <i class="fa-solid fa-id-card"></i>
+                </span>
+                <input type="text" id="nik" maxlength="16" placeholder="Contoh: 321401..." required
+                  class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-tjokro-green focus:ring-2 focus:ring-tjokro-green/20 text-sm font-mono tracking-wider transition outline-none">
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">Wajib 16 digit tertera di e-KTP.</p>
+            </div>
+
+            <!-- Nama Lengkap -->
+            <div>
+              <label for="nama_lengkap" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                Nama Lengkap (Sesuai e-KTP) <span class="text-red-500">*</span>
+              </label>
+              <input type="text" id="nama_lengkap" placeholder="Nama lengkap tanpa singkatan" required
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-tjokro-green focus:ring-2 focus:ring-tjokro-green/20 text-sm transition outline-none">
+            </div>
+
+            <!-- Tempat & Tanggal Lahir -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label for="tempat_lahir" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Tempat Lahir <span class="text-red-500">*</span>
+                </label>
+                <input type="text" id="tempat_lahir" placeholder="Contoh: Purwakarta" required
+                  class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-tjokro-green focus:ring-2 focus:ring-tjokro-green/20 text-sm transition outline-none">
+              </div>
+              <div>
+                <label for="tanggal_lahir" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Tanggal Lahir <span class="text-red-500">*</span>
+                </label>
+                <input type="date" id="tanggal_lahir" required
+                  class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-tjokro-green focus:ring-2 focus:ring-tjokro-green/20 text-sm transition outline-none">
+              </div>
+            </div>
+
+            <!-- Jenis Kelamin & Status Pekerjaan -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Jenis Kelamin <span class="text-red-500">*</span></label>
+                <div class="grid grid-cols-2 gap-2">
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-50 transition">
+                    <input type="radio" name="jenis_kelamin" value="Laki-laki" checked class="text-tjokro-green focus:ring-tjokro-green">
+                    <span class="text-xs font-semibold">Laki-laki</span>
+                  </label>
+                  <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-50 transition">
+                    <input type="radio" name="jenis_kelamin" value="Perempuan" class="text-tjokro-green focus:ring-tjokro-green">
+                    <span class="text-xs font-semibold">Perempuan</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label for="pekerjaan" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Pekerjaan / Usaha <span class="text-red-500">*</span>
+                </label>
+                <select id="pekerjaan" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-tjokro-green focus:ring-2 focus:ring-tjokro-green/20 text-sm transition outline-none bg-white">
+                  <option value="">Pilih Profesi</option>
+                  <option value="Pelaku UMKM / Pedagang">Pelaku UMKM / Pedagang</option>
+                  <option value="Karyawan Swasta / Buruh Pabrik">Karyawan Swasta / Buruh Pabrik</option>
+                  <option value="Petani / Peternak Purwakarta">Petani / Peternak Purwakarta</option>
+                  <option value="Pegawai Negeri (ASN / BUMN)">Pegawai Negeri (ASN / BUMN)</option>
+                  <option value="Wiraswasta / Profesional Mandiri">Wiraswasta / Profesional Mandiri</option>
+                  <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- WhatsApp & Email -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label for="no_hp" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Nomor WhatsApp Aktif <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-emerald-600 font-bold">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                  </span>
+                  <input type="tel" id="no_hp" placeholder="08xxxxxxxxxx" required
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-tjokro-green focus:ring-2 focus:ring-tjokro-green/20 text-sm transition outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Email <span class="text-slate-400 font-normal">(Opsional)</span>
+                </label>
+                <input type="email" id="email" placeholder="nama@email.com"
+                  class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-tjokro-green focus:ring-2 focus:ring-tjokro-green/20 text-sm transition outline-none">
+              </div>
+            </div>
+
+            <!-- Alamat Domisili -->
+            <div>
+              <label for="alamat" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                Alamat Domisili Lengkap (Purwakarta & Sekitarnya) <span class="text-red-500">*</span>
+              </label>
+              <textarea id="alamat" rows="2" placeholder="Nama Jalan, RT/RW, Dusun, Desa/Kelurahan, Kecamatan" required
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-tjokro-green focus:ring-2 focus:ring-tjokro-green/20 text-sm transition outline-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Unggah Dokumen Pendukung -->
+        <div id="step-content-2" class="step-page hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-5">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-tjokro-mint text-tjokro-green flex items-center justify-center text-xs">
+                <i class="fa-solid fa-camera"></i>
+              </span>
+              Unggah Dokumen Verifikasi
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">Dapat difoto langsung dengan kamera ponsel pintar Anda atau diunggah dari galeri.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <!-- Foto e-KTP -->
+            <div class="space-y-2">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Foto e-KTP Asli <span class="text-red-500">*</span>
+              </label>
+              <div class="border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center hover:border-tjokro-green bg-slate-50/60 min-h-[190px] flex flex-col items-center justify-center relative overflow-hidden transition group">
+                <input type="file" id="file-ktp" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewUpload(this, 'preview-ktp', 'box-ktp')">
+                <div id="box-ktp" class="flex flex-col items-center pointer-events-none">
+                  <div class="w-12 h-12 rounded-2xl bg-tjokro-mint text-tjokro-green flex items-center justify-center mb-2 text-xl group-hover:scale-110 transition">
+                    <i class="fa-regular fa-address-card"></i>
+                  </div>
+                  <p class="text-xs font-bold text-slate-700">Sentuh untuk foto/ambil KTP</p>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Format JPG/PNG, teks terbaca jelas</p>
+                </div>
+                <img id="preview-ktp" src="" alt="Pratinjau KTP" class="hidden absolute inset-0 w-full h-full object-cover rounded-2xl">
+              </div>
+              <p class="text-[11px] text-slate-400"><i class="fa-solid fa-shield-halved text-tjokro-green mr-1"></i>Hanya untuk kebutuhan administrasi koperasi.</p>
+            </div>
+
+            <!-- Pasfoto / Swafoto -->
+            <div class="space-y-2">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Pasfoto / Swafoto Wajah <span class="text-red-500">*</span>
+              </label>
+              <div class="border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center hover:border-tjokro-green bg-slate-50/60 min-h-[190px] flex flex-col items-center justify-center relative overflow-hidden transition group">
+                <input type="file" id="file-selfie" accept="image/*" capture="user" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewUpload(this, 'preview-selfie', 'box-selfie')">
+                <div id="box-selfie" class="flex flex-col items-center pointer-events-none">
+                  <div class="w-12 h-12 rounded-2xl bg-amber-50 text-tjokro-gold flex items-center justify-center mb-2 text-xl group-hover:scale-110 transition">
+                    <i class="fa-solid fa-camera-rotate"></i>
+                  </div>
+                  <p class="text-xs font-bold text-slate-700">Sentuh untuk selfie / pasfoto</p>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Wajah menghadap lurus ke depan</p>
+                </div>
+                <img id="preview-selfie" src="" alt="Pratinjau Selfie" class="hidden absolute inset-0 w-full h-full object-cover rounded-2xl">
+              </div>
+              <p class="text-[11px] text-slate-400"><i class="fa-solid fa-circle-check text-tjokro-gold mr-1"></i>Akan digunakan sebagai foto Kartu Anggota (e-KTA).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Komitmen Simpanan Pokok & Wajib -->
+        <div id="step-content-3" class="step-page hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-5">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-amber-50 text-tjokro-gold flex items-center justify-center text-xs">
+                <i class="fa-solid fa-coins"></i>
+              </span>
+              Simpanan Anggota Koperasi
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">Sesuai AD/ART Koperasi Konsumen HOS TJOKROAMINOTO, anggota memiliki modal bersama.</p>
+          </div>
+
+          <!-- Rincian Iuran Card -->
+          <div class="bg-gradient-to-br from-tjokro-mint/70 via-white to-amber-50/50 border border-tjokro-green/20 rounded-2xl p-5 space-y-4">
+            
+            <div class="flex items-center justify-between pb-3 border-b border-tjokro-green/10">
+              <div>
+                <h3 class="font-bold text-sm text-tjokro-darkgreen">1. Simpanan Pokok (1x di awal)</h3>
+                <p class="text-xs text-slate-500">Iuran kepemilikan saham anggota pertama kali</p>
+              </div>
+              <span class="font-mono font-bold text-sm text-tjokro-darkgreen">Rp 25.000</span>
+            </div>
+
+            <div class="flex items-center justify-between pb-3 border-b border-tjokro-green/10">
+              <div>
+                <h3 class="font-bold text-sm text-tjokro-darkgreen">2. Simpanan Wajib (Bulanan)</h3>
+                <p class="text-xs text-slate-500">Pilihan iuran rutin bulanan anggota</p>
+              </div>
+              <div>
+                <select id="pilihan_simpanan_wajib" onchange="updateTotalSetoran()" class="px-2.5 py-1.5 bg-white border border-tjokro-green/30 rounded-xl text-xs font-bold text-tjokro-darkgreen focus:outline-none">
+                  <option value="10000" selected>Rp 10.000 / bln</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pb-3 border-b border-tjokro-green/10">
+              <div>
+                <h3 class="font-bold text-sm text-tjokro-darkgreen">3. Simpanan Sukarela <span class="text-tjokro-gold text-[10px] font-black">(Opsional)</span></h3>
+                <p class="text-xs text-slate-500">Nominal ditambahkan sendiri oleh calon anggota — boleh dikosongkan</p>
+              </div>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400 text-[11px] font-black pointer-events-none">Rp</span>
+                <input type="number" id="sukarela_input" min="0" step="1000" placeholder="0" oninput="updateTotalSetoran()"
+                  class="w-32 pl-7 pr-2.5 py-1.5 bg-white border border-tjokro-green/30 rounded-xl text-xs font-bold text-tjokro-darkgreen focus:outline-none text-right">
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <div>
+                <span class="text-xs uppercase font-extrabold tracking-wider text-tjokro-gold">Total Komitmen Setoran Awal</span>
+                <p class="text-[11px] text-slate-500">Pokok + Wajib + Sukarela — dibayarkan saat disahkan pengurus</p>
+              </div>
+              <span id="label-total-setoran" class="text-xl font-black text-tjokro-green font-mono">Rp 35.000</span>
+            </div>
+          </div>
+
+          <!-- Pilihan Metode Pembayaran -->
+          <div class="space-y-2.5">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Rencana Pembayaran Setoran Awal</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="flex items-center gap-3 p-3.5 rounded-2xl border-2 border-tjokro-green bg-tjokro-mint/40 cursor-pointer">
+                <input type="radio" name="metode_bayar" value="QRIS" checked class="text-tjokro-green focus:ring-tjokro-green">
+                <div>
+                  <div class="font-bold text-xs text-tjokro-darkgreen flex items-center gap-1.5">
+                    <i class="fa-solid fa-qrcode text-tjokro-green"></i> QRIS Koperasi (Instan)
+                  </div>
+                  <p class="text-[11px] text-slate-500">BCA, Mandiri, BRI, GoPay, Dana, OVO</p>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
+                <input type="radio" name="metode_bayar" value="Transfer Bank / Kasir" class="text-tjokro-green focus:ring-tjokro-green">
+                <div>
+                  <div class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                    <i class="fa-solid fa-building-columns text-slate-600"></i> Rekening Koperasi / Kasir
+                  </div>
+                  <p class="text-[11px] text-slate-500">Transfer BJB / BRI / Setor Langsung di Kantor</p>
+                </div>
+              </label>
+            </div>
+          </div>
+          <!-- Upload Bukti Pembayaran (opsional) -->
+          <div class="space-y-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+              Bukti Pembayaran Setoran Awal <span class="text-slate-400 font-normal">(Opsional)</span>
+            </label>
+            <div class="border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center hover:border-tjokro-green bg-slate-50/60 min-h-[140px] flex flex-col items-center justify-center relative overflow-hidden transition group cursor-pointer"
+                 onclick="document.getElementById('file-bukti').click()">
+              <input type="file" id="file-bukti" accept="image/*" class="hidden" onchange="previewUpload(this, 'preview-bukti', 'box-bukti')">
+              <div id="box-bukti" class="flex flex-col items-center pointer-events-none">
+                <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2 text-lg group-hover:scale-110 transition">
+                  <i class="fa-solid fa-receipt"></i>
+                </div>
+                <p class="text-xs font-bold text-slate-700">Unggah screenshot QRIS / struk transfer</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Boleh dilewati — unggah setelah Anda membayar</p>
+              </div>
+              <img id="preview-bukti" src="" alt="Pratinjau Bukti Bayar" class="hidden absolute inset-0 w-full h-full object-cover rounded-2xl">
+            </div>
+            <p class="text-[11px] text-slate-400"><i class="fa-solid fa-shield-halved text-tjokro-green mr-1"></i>Tampil di Panel Pengurus — status &quot;Lunas&quot; ditandai setelah cocok dengan mutasi rekening.</p>
+          </div>
+        </div>
+
+        <!-- STEP 4: AD/ART & Tanda Tangan Digital -->
+        <div id="step-content-4" class="step-page hidden bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-5">
+          <div class="border-b border-slate-100 pb-3">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-tjokro-mint text-tjokro-green flex items-center justify-center text-xs">
+                <i class="fa-solid fa-signature"></i>
+              </span>
+              Persetujuan & Tanda Tangan Digital
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">Tahap akhir permohonan keanggotaan Koperasi HOS TJOKROAMINOTO.</p>
+          </div>
+
+          <!-- Klausul AD/ART -->
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-600 space-y-2 max-h-36 overflow-y-auto">
+            <p class="font-bold text-tjokro-darkgreen">Pernyataan Komitmen Calon Anggota:</p>
+            <ol class="list-decimal pl-4 space-y-1 text-[11px]">
+              <li>Menyatakan bersedia menjadi anggota <strong>Koperasi Konsumen HOS TJOKROAMINOTO</strong> atas kemauan sendiri secara sadar.</li>
+              <li>Tunduk dan taat pada Anggaran Dasar / Anggaran Rumah Tangga (AD/ART) serta keputusan Rapat Anggota Tahunan (RAT).</li>
+              <li>Bersedia memenuhi kewajiban Simpanan Pokok dan Simpanan Wajib secara tertib.</li>
+              <li>Menjunjung tinggi asas kekeluargaan dan gotong royong sesuai amanah kepemimpinan H.O.S. Tjokroaminoto.</li>
+            </ol>
+          </div>
+
+          <!-- Checkbox Persetujuan -->
+          <label class="flex items-start gap-3 p-3.5 rounded-2xl border border-tjokro-green/30 bg-tjokro-mint/50 cursor-pointer">
+            <input type="checkbox" id="check-persetujuan" required class="mt-0.5 w-4 h-4 text-tjokro-green rounded border-slate-300 focus:ring-tjokro-green">
+            <span class="text-xs font-semibold text-tjokro-darkgreen leading-relaxed">
+              Saya telah membaca, memahami, dan menyetujui seluruh ketentuan AD/ART Koperasi di atas serta bertanggung jawab atas kebenaran data saya.
+            </span>
+          </label>
+
+          <!-- Signature Pad -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Goreskan Tanda Tangan Anda di Bawah <span class="text-red-500">*</span>
+              </label>
+              <button type="button" onclick="clearSignatureCanvas()" class="text-xs text-rose-600 hover:text-rose-700 font-bold flex items-center gap-1">
+                <i class="fa-solid fa-rotate-left"></i> Bersihkan / Ulangi
+              </button>
+            </div>
+
+            <div class="border-2 border-dashed border-slate-300 rounded-2xl bg-white relative overflow-hidden shadow-inner">
+              <canvas id="signature-canvas" width="600" height="170" class="w-full h-40 cursor-crosshair bg-slate-50/40"></canvas>
+              <div id="signature-placeholder" class="absolute inset-0 flex items-center justify-center pointer-events-none text-slate-400 text-xs">
+                <span><i class="fa-solid fa-pen-nib mr-1 text-tjokro-gold"></i> Sentuh dengan jari di layar HP atau mouse di sini</span>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-400">Tanda tangan digital ini sah sebagai bukti verifikasi keanggotaan.</p>
+          </div>
+        </div>
+
+        <!-- Wizard Navigation Buttons -->
+        <div class="flex items-center justify-between pt-2">
+          <button type="button" id="btn-prev-step" onclick="prevStep()" class="hidden px-5 py-2.5 rounded-2xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-100 transition flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
+          </button>
+          
+          <div class="ml-auto flex items-center gap-3">
+            <button type="button" id="btn-next-step" onclick="nextStep()" class="px-6 py-2.5 rounded-2xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs shadow-md shadow-tjokro-green/20 transition flex items-center gap-2">
+              <span>Lanjutkan</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <button type="button" id="btn-submit-form" onclick="submitRegistration()" class="hidden px-7 py-2.5 rounded-2xl bg-gradient-to-r from-tjokro-green to-tjokro-lightgreen hover:from-tjokro-darkgreen hover:to-tjokro-green text-white font-bold text-xs shadow-lg shadow-tjokro-green/30 transition flex items-center gap-2">
+              <i class="fa-solid fa-paper-plane text-tjokro-accentgold"></i>
+              <span>Kirim Pendaftaran</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- SUCCESS & BUKTI REGISTRASI CARD (Shown after submission) -->
+      <div id="success-screen" class="hidden bg-white rounded-3xl p-6 sm:p-9 shadow-lg border border-slate-200 text-center space-y-6">
+        
+        <div class="w-16 h-16 bg-emerald-100 text-tjokro-green rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-inner animate-bounce">
+          <i class="fa-solid fa-check-double"></i>
+        </div>
+
+        <div class="space-y-1">
+          <span class="inline-block px-3 py-1 bg-amber-100 text-tjokro-amber font-bold text-xs rounded-full">Status: Menunggu Konfirmasi Pengurus</span>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900">Formulir Pendaftaran Berhasil Dikirim!</h2>
+          <p class="text-xs text-slate-500 max-w-md mx-auto">Selamat! Formulir Anda telah tercatat di sistem <strong>Koperasi Konsumen HOS TJOKROAMINOTO</strong>. Silakan simpan kartu bukti registrasi berikut.</p>
+        </div>
+
+        <!-- Kartu Registrasi Calon Anggota Digital -->
+        <div class="bg-gradient-to-br from-tjokro-darkgreen via-tjokro-green to-slate-900 text-white p-6 rounded-3xl max-w-md mx-auto shadow-2xl text-left border-2 border-tjokro-accentgold/30 relative overflow-hidden">
+          <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-tjokro-gold/15 rounded-full blur-xl pointer-events-none"></div>
+
+          <!-- Kop Kartu -->
+          <div class="flex items-center justify-between pb-4 border-b border-white/15">
+            <div>
+              <p class="text-[10px] uppercase font-bold tracking-widest text-tjokro-accentgold">BUKTI PENDAFTARAN ANGGOTA</p>
+              <h4 class="font-black text-sm tracking-tight text-white leading-tight">KOP. KONSUMEN HOS TJOKROAMINOTO</h4>
+              <p class="text-[9px] text-emerald-200">Purwakarta Istimewa</p>
+            </div>
+            <i class="fa-solid fa-award text-tjokro-accentgold text-3xl"></i>
+          </div>
+
+          <!-- Data Kartu -->
+          <div class="py-4 space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-slate-300">No. Registrasi:</span>
+              <span id="succ-reg-no" class="font-mono font-bold text-tjokro-accentgold">REG-2026-XXXX</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-300">Nama Calon:</span>
+              <span id="succ-nama" class="font-bold text-white">-</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-300">NIK:</span>
+              <span id="succ-nik" class="font-mono text-slate-200">-</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-300">Waktu Scan & Daftar:</span>
+              <span id="succ-waktu" class="text-slate-200">-</span>
+            </div>
+          </div>
+
+          <!-- Barcode dummy strip -->
+          <div class="pt-3 border-t border-white/15 flex flex-col items-center">
+            <div class="h-8 w-full bg-white/95 rounded-lg px-2 flex items-center justify-center space-x-1">
+              <span class="h-full w-1 bg-black inline-block"></span>
+              <span class="h-full w-2.5 bg-black inline-block"></span>
+              <span class="h-full w-1 bg-black inline-block"></span>
+              <span class="h-full w-3 bg-black inline-block"></span>
+              <span class="h-full w-1 bg-black inline-block"></span>
+              <span class="h-full w-2 bg-black inline-block"></span>
+              <span class="h-full w-1.5 bg-black inline-block"></span>
+              <span class="h-full w-3 bg-black inline-block"></span>
+              <span class="h-full w-1 bg-black inline-block"></span>
+              <span class="h-full w-2 bg-black inline-block"></span>
+            </div>
+            <span class="text-[9px] text-slate-300 tracking-widest mt-1.5 font-mono">TUNJUKKAN KARTU INI SAAT VERIFIKASI</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <button onclick="downloadBukti()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i> Simpan Kartu Digital
+          </button>
+          <button onclick="resetWizard()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-100 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-plus"></i> Isi Pendaftaran Lain
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 2: PANEL PENGURUS / ADMIN KOPERASI                        -->
+    <!-- ============================================================== -->
+    <section id="view-admin" class="hidden space-y-7">
+      
+      <!-- Metrik Cepat -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Rekrutmen</p>
+            <h3 id="stat-total" class="text-2xl font-black text-slate-900 mt-1">4</h3>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-tjokro-mint text-tjokro-green flex items-center justify-center text-lg">
+            <i class="fa-solid fa-users"></i>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-amber-600 uppercase tracking-wider">Menunggu Verifikasi</p>
+            <h3 id="stat-pending" class="text-2xl font-black text-slate-900 mt-1">2</h3>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 text-tjokro-gold flex items-center justify-center text-lg">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Disetujui (Ber-NIA)</p>
+            <h3 id="stat-approved" class="text-2xl font-black text-slate-900 mt-1">1</h3>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-rose-600 uppercase tracking-wider">Perlu Perbaikan</p>
+            <h3 id="stat-rejected" class="text-2xl font-black text-slate-900 mt-1">1</h3>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-circle-exclamation"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner Generator QR Standee Rekrutmen -->
+      <div class="bg-gradient-to-br from-tjokro-darkgreen via-tjokro-green to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-tjokro-gold/20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <div class="lg:col-span-7 space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-tjokro-accentgold border border-amber-400/30">
+              <i class="fa-solid fa-qrcode"></i> Generator Standee / Poster Scan QR Calon Anggota
+            </div>
+            
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
+              Cetak Standee QR Pendaftaran di Kantor & Acara Koperasi
+            </h2>
+            <p class="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+              Cukup cetak standee ini di meja kasir, banner rekrutmen warga Purwakarta, atau brosur. Calon anggota hanya perlu membuka kamera ponsel untuk langsung mengisi formulir pendaftaran digital.
+            </p>
+
+            <!-- Customizer Tags -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <div>
+                <label class="block text-[11px] font-bold text-emerald-200 uppercase mb-1">Nama Lokasi / Event Rekrutmen:</label>
+                <input type="text" id="qr-event-tag" value="EVENT-PURWAKARTA-ISTIMEWA" oninput="regenerateRecruitmentQR()"
+                  class="w-full px-3.5 py-2 bg-slate-900/80 border border-emerald-500/30 rounded-xl text-xs text-white focus:outline-none focus:border-tjokro-accentgold">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-emerald-200 uppercase mb-1">Petugas Lapangan / Referral:</label>
+                <input type="text" id="qr-officer-name" value="Pengurus Koperasi HOS TJOKRO" oninput="regenerateRecruitmentQR()"
+                  class="w-full px-3.5 py-2 bg-slate-900/80 border border-emerald-500/30 rounded-xl text-xs text-white focus:outline-none focus:border-tjokro-accentgold">
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex flex-wrap gap-3 pt-2">
+              <button onclick="printStandeeQR()" class="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-tjokro-gold to-tjokro-accentgold hover:from-tjokro-amber hover:to-tjokro-gold text-slate-950 font-black text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/30">
+                <i class="fa-solid fa-print"></i> Cetak Poster / Standee QR
+              </button>
+              <button onclick="simulateScanMember()" class="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition flex items-center gap-2">
+                <i class="fa-solid fa-mobile-screen"></i> Buka Preview HP Calon
+              </button>
+            </div>
+          </div>
+
+          <!-- Standee Preview Box (Target Print Layout) -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div id="print-qr-target" class="bg-white text-slate-900 p-6 rounded-3xl shadow-2xl max-w-xs w-full text-center border-4 border-tjokro-gold">
+              
+              <!-- Kop Standee -->
+              <div class="flex items-center justify-center gap-2 mb-2">
+                <img src="Pendaftaran-Anggota/public/logo-koperasi.png" alt="Logo Koperasi HOS Tjokroaminoto" class="w-10 h-10 object-contain rounded-full bg-white">
+                <div class="text-left">
+                  <span class="block font-black text-[11px] text-tjokro-darkgreen leading-tight">KOP. KONSUMEN</span>
+                  <span class="block font-black text-xs text-tjokro-gold leading-tight">HOS TJOKROAMINOTO</span>
+                </div>
+              </div>
+
+              <div class="my-2 py-1 bg-tjokro-mint rounded-lg border border-tjokro-green/20">
+                <p class="text-[10px] font-black text-tjokro-darkgreen uppercase tracking-wider">SCAN UNTUK JADI ANGGOTA</p>
+                <p class="text-[9px] text-tjokro-green italic">"Bersama Membangun, Sejahtera Bersama"</p>
+              </div>
+
+              <!-- Render QRCode -->
+              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 flex justify-center my-3 shadow-inner">
+                <div id="qrcode-canvas" class="flex justify-center"></div>
+              </div>
+
+              <div class="space-y-1">
+                <p class="text-xs font-extrabold text-slate-900">Arahkan Kamera HP Anda ke Sini</p>
+                <p id="qr-display-tag" class="text-[10px] font-mono text-slate-500">Ref: EVENT-PURWAKARTA-ISTIMEWA</p>
+                <div class="pt-2 text-[9px] text-slate-400 font-semibold border-t border-slate-100 uppercase tracking-widest">
+                  PURWAKARTA ISTIMEWA &bull; RESMI
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Table of Applicants -->
+      <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+        
+        <!-- Toolbar & Filter -->
+        <div class="p-5 sm:p-6 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-base font-extrabold text-slate-900">Data Pendaftar Calon Anggota</h3>
+            <p class="text-xs text-slate-500">Verifikasi berkas, setujui pendaftaran, terbitkan NIA, atau ekspor data ke software koperasi.</p>
+          </div>
+
+          <!-- Actions: Search + Filter + Export -->
+          <div class="flex items-center gap-2.5 flex-wrap">
+            
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input type="text" id="admin-search-input" onkeyup="filterApplicantsTable()" placeholder="Cari nama atau NIK..." 
+                class="pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-tjokro-green">
+            </div>
+
+            <select id="admin-filter-status" onchange="filterApplicantsTable()" class="px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-tjokro-green bg-white font-semibold">
+              <option value="ALL">Semua Status</option>
+              <option value="Menunggu">Menunggu</option>
+              <option value="Disetujui">Disetujui</option>
+              <option value="Ditolak">Ditolak</option>
+            </select>
+
+            <!-- Cetak Daftar Pendaftar -->
+            <button type="button" onclick="printApplicantList()" class="cursor-pointer px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-print text-tjokro-accentgold"></i>
+              <span>Cetak Daftar</span>
+            </button>
+
+            <!-- Export to CSV / Excel for Core Software Integration -->
+            <button onclick="exportToCSV()" class="px-3.5 py-2 rounded-xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-file-excel text-tjokro-accentgold"></i>
+              <span>Ekspor Excel/CSV</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-600 uppercase font-bold border-b border-slate-200 text-[11px]">
+              <tr>
+                <th class="py-3.5 px-4">No. Registrasi</th>
+                <th class="py-3.5 px-4">Calon Anggota</th>
+                <th class="py-3.5 px-4">Kontak WhatsApp</th>
+                <th class="py-3.5 px-4">Pekerjaan</th>
+                <th class="py-3.5 px-4">Komitmen Setoran</th>
+                <th class="py-3.5 px-4">Status & NIA</th>
+                <th class="py-3.5 px-4 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="applicant-table-body" class="divide-y divide-slate-100">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty state -->
+        <div id="table-empty-state" class="hidden p-8 text-center text-slate-400 text-xs">
+          <i class="fa-regular fa-folder-open text-2xl mb-1 block"></i>
+          Tidak ditemukan data pendaftar yang cocok.
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL DETAIL & VERIFIKASI CALON ANGGOTA -->
+  <div id="detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div>
+          <span id="modal-reg-no" class="text-xs font-mono font-bold text-tjokro-green bg-tjokro-mint px-2.5 py-0.5 rounded-md">REG-XXXX</span>
+          <h3 class="font-extrabold text-base text-slate-900 mt-1">Verifikasi Calon Anggota Koperasi</h3>
+        </div>
+        <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center text-slate-600 transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-5 max-h-[72vh] overflow-y-auto text-xs">
+        
+        <!-- Identitas Utama -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+          <div>
+            <span class="text-slate-400 uppercase text-[10px] font-bold">Nama Lengkap</span>
+            <p id="m-nama" class="font-bold text-slate-900 text-sm">-</p>
+          </div>
+          <div>
+            <span class="text-slate-400 uppercase text-[10px] font-bold">NIK e-KTP</span>
+            <p id="m-nik" class="font-mono font-semibold text-slate-800">-</p>
+          </div>
+          <div>
+            <span class="text-slate-400 uppercase text-[10px] font-bold">Jenis Kelamin</span>
+            <p id="m-gender" class="font-semibold text-slate-800">-</p>
+          </div>
+          <div>
+            <span class="text-slate-400 uppercase text-[10px] font-bold">TTL</span>
+            <p id="m-ttl" class="font-semibold text-slate-800">-</p>
+          </div>
+          <div>
+            <span class="text-slate-400 uppercase text-[10px] font-bold">WhatsApp</span>
+            <p id="m-wa" class="font-semibold text-emerald-700">-</p>
+          </div>
+          <div>
+            <span class="text-slate-400 uppercase text-[10px] font-bold">Pekerjaan</span>
+            <p id="m-pekerjaan" class="font-semibold text-slate-800">-</p>
+          </div>
+          <div class="col-span-2 sm:col-span-3">
+            <span class="text-slate-400 uppercase text-[10px] font-bold">Alamat Domisili</span>
+            <p id="m-alamat" class="font-semibold text-slate-800">-</p>
+          </div>
+        </div>
+
+        <!-- Rincian Iuran -->
+        <div class="bg-tjokro-mint/60 border border-tjokro-green/20 p-4 rounded-2xl flex items-center justify-between">
+          <div>
+            <span class="text-[10px] text-tjokro-darkgreen uppercase font-bold">Komitmen Setoran Awal</span>
+            <p class="text-slate-600 text-xs mt-0.5">Pokok: Rp 25.000 + Wajib: <span id="m-simpanan-wajib" class="font-bold font-mono">Rp 10.000</span></p>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] text-slate-400 uppercase">Metode Rencana:</span>
+            <p id="m-metode" class="font-bold text-tjokro-darkgreen text-xs">QRIS</p>
+          </div>
+        </div>
+
+        <!-- Lampiran Berkas KTP & TTD -->
+        <div>
+          <h4 class="font-bold text-slate-900 mb-2">Lampiran Berkas & Tanda Tangan:</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="border border-slate-200 rounded-2xl p-3 text-center bg-slate-50">
+              <span class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Foto KTP</span>
+              <img id="m-img-ktp" src="" alt="KTP" class="max-h-36 mx-auto rounded-xl object-contain border border-slate-200 shadow-sm bg-white">
+            </div>
+            <div class="border border-slate-200 rounded-2xl p-3 text-center bg-slate-50">
+              <span class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Tanda Tangan Digital</span>
+              <img id="m-img-ttd" src="" alt="TTD" class="max-h-36 mx-auto rounded-xl object-contain border border-slate-200 shadow-sm bg-white">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Buttons Modal -->
+      <div id="modal-footer-actions" class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2.5">
+        <button onclick="closeDetailModal()" class="px-4 py-2 rounded-xl border border-slate-300 font-bold text-xs text-slate-600 hover:bg-slate-200 transition">
+          Tutup
+        </button>
+        <button type="button" onclick="printApplicantFromModal()" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs transition flex items-center gap-1.5">
+          <i class="fa-solid fa-print text-tjokro-accentgold"></i> Cetak Formulir
+        </button>
+        <button id="modal-btn-reject" onclick="changeStatusFromModal('Ditolak')" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition flex items-center gap-1.5">
+          <i class="fa-solid fa-xmark"></i> Tolak / Berkas Kurang
+        </button>
+        <button id="modal-btn-approve" onclick="changeStatusFromModal('Disetujui')" class="px-5 py-2 rounded-xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs transition flex items-center gap-1.5 shadow-md shadow-tjokro-green/20">
+          <i class="fa-solid fa-check text-tjokro-accentgold"></i> Setujui & Terbitkan NIA
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRINT SHEET CONTAINER (hanya tampil saat cetak) -->
+  <div id="print-sheet"></div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs">
+    <i id="toast-icon" class="fa-solid fa-circle-check text-tjokro-accentgold text-base"></i>
+    <span id="toast-msg" class="font-semibold">Pemberitahuan berhasil</span>
+  </div>
+
+  <script>
+    /* ================================================================
+       1. DATA STORAGE & STATE (Purwakarta Members Sample)
+    ================================================================ */
+    let currentStep = 1;
+    let selectedApplicantId = null;
+
+    let applicants = [
+      {
+        id: "REG-2026-0012",
+        nia: "NIA-PWK-260012",
+        nama: "Ahmad Fauzi Ridwan",
+        nik: "3214011504880003",
+        ttl: "Purwakarta, 15 April 1988",
+        gender: "Laki-laki",
+        pekerjaan: "Pelaku UMKM / Pedagang",
+        hp: "081223344556",
+        email: "ahmad.fauzi@gmail.com",
+        alamat: "Jl. Veteran No. 28, Nagri Kaler, Purwakarta",
+        simpananPokok: 25000,
+        simpananWajib: 10000,
+        metode: "QRIS",
+        status: "Disetujui",
+        tanggalDaftar: "11 Okt 2026",
+        ktpUrl: "https://placehold.co/400x250/e2e8f0/0b5336?text=e-KTP+Ahmad+Fauzi",
+        ttdUrl: "https://placehold.co/400x150/f8fafc/0b5336?text=TTD+Digital"
+      },
+      {
+        id: "REG-2026-0013",
+        nia: "-",
+        nama: "Siti Nurhaliza",
+        nik: "3214026209930005",
+        ttl: "Purwakarta, 22 September 1993",
+        gender: "Perempuan",
+        pekerjaan: "Karyawan Swasta / Buruh Pabrik",
+        hp: "087788991122",
+        email: "siti.nurhaliza@gmail.com",
+        alamat: "Desa Cibatu, Kec. Cibatu, Purwakarta",
+        simpananPokok: 25000,
+        simpananWajib: 10000,
+        metode: "QRIS",
+        status: "Menunggu",
+        tanggalDaftar: "12 Okt 2026",
+        ktpUrl: "https://placehold.co/400x250/e2e8f0/0b5336?text=e-KTP+Siti",
+        ttdUrl: "https://placehold.co/400x150/f8fafc/0b5336?text=TTD+Digital"
+      },
+      {
+        id: "REG-2026-0014",
+        nia: "-",
+        nama: "Deden Kurniawan",
+        nik: "3214051001850002",
+        ttl: "Purwakarta, 10 Januari 1985",
+        gender: "Laki-laki",
+        pekerjaan: "Petani / Peternak Purwakarta",
+        hp: "085299887766",
+        email: "-",
+        alamat: "Desa Pasawahan Kidul, Pasawahan",
+        simpananPokok: 25000,
+        simpananWajib: 10000,
+        metode: "Transfer Bank / Kasir",
+        status: "Menunggu",
+        tanggalDaftar: "12 Okt 2026",
+        ktpUrl: "https://placehold.co/400x250/e2e8f0/0b5336?text=e-KTP+Deden",
+        ttdUrl: "https://placehold.co/400x150/f8fafc/0b5336?text=TTD+Digital"
+      },
+      {
+        id: "REG-2026-0015",
+        nia: "-",
+        nama: "Budi Gunadi",
+        nik: "3214030507900008",
+        ttl: "Subang, 05 Juli 1990",
+        gender: "Laki-laki",
+        pekerjaan: "Lainnya",
+        hp: "089612345678",
+        email: "-",
+        alamat: "Kecamatan Jatiluhur, Purwakarta",
+        simpananPokok: 25000,
+        simpananWajib: 10000,
+        metode: "QRIS",
+        status: "Ditolak",
+        tanggalDaftar: "10 Okt 2026",
+        ktpUrl: "https://placehold.co/400x250/fee2e2/991b1b?text=KTP+Buram",
+        ttdUrl: "https://placehold.co/400x150/f8fafc/0b5336?text=TTD+Digital"
+      }
+    ];
+
+    /* ================================================================
+       2. VIEW NAVIGATION CONTROLLER
+    ================================================================ */
+    function switchMainView(view) {
+      const memberView = document.getElementById('view-member');
+      const adminView = document.getElementById('view-admin');
+      const btnMember = document.getElementById('nav-btn-member');
+      const btnAdmin = document.getElementById('nav-btn-admin');
+
+      if (view === 'member') {
+        memberView.classList.remove('hidden');
+        adminView.classList.add('hidden');
+        btnMember.className = "flex items-center gap-2 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm bg-tjokro-green text-white";
+        btnAdmin.className = "flex items-center gap-2 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-slate-600 hover:text-slate-900";
+      } else {
+        memberView.classList.add('hidden');
+        adminView.classList.remove('hidden');
+        btnAdmin.className = "flex items-center gap-2 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition-all shadow-sm bg-tjokro-green text-white";
+        btnMember.className = "flex items-center gap-2 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-slate-600 hover:text-slate-900";
+        renderApplicantsTable();
+        updateStatistics();
+        regenerateRecruitmentQR();
+      }
+    }
+
+    /* ================================================================
+       3. WIZARD STEPPER CONTROLLER
+    ================================================================ */
+    function showStep(stepNumber) {
+      currentStep = stepNumber;
+      document.getElementById('current-step-text').innerText = stepNumber;
+
+      for (let i = 1; i <= 4; i++) {
+        const stepPage = document.getElementById(`step-content-${i}`);
+        const stepInd = document.getElementById(`step-ind-${i}`);
+        const circle = stepInd.querySelector('div');
+
+        if (i === stepNumber) {
+          stepPage.classList.remove('hidden');
+          stepInd.classList.remove('opacity-40');
+          circle.className = "w-9 h-9 rounded-2xl flex items-center justify-center text-xs mb-1.5 transition-all bg-tjokro-green text-white shadow-md ring-4 ring-tjokro-mint";
+          circle.innerText = i;
+        } else if (i < stepNumber) {
+          stepPage.classList.add('hidden');
+          stepInd.classList.remove('opacity-40');
+          circle.className = "w-9 h-9 rounded-2xl flex items-center justify-center text-xs mb-1.5 transition-all bg-emerald-600 text-white";
+          circle.innerHTML = '<i class="fa-solid fa-check"></i>';
+        } else {
+          stepPage.classList.add('hidden');
+          stepInd.classList.add('opacity-40');
+          circle.className = "w-9 h-9 rounded-2xl flex items-center justify-center text-xs mb-1.5 transition-all bg-slate-200 text-slate-600";
+          circle.innerText = i;
+        }
+      }
+
+      const progressWidths = { 1: '25%', 2: '50%', 3: '75%', 4: '100%' };
+      document.getElementById('stepper-progress-bar').style.width = progressWidths[stepNumber];
+
+      const btnPrev = document.getElementById('btn-prev-step');
+      const btnNext = document.getElementById('btn-next-step');
+      const btnSubmit = document.getElementById('btn-submit-form');
+
+      if (stepNumber === 1) {
+        btnPrev.classList.add('hidden');
+      } else {
+        btnPrev.classList.remove('hidden');
+      }
+
+      if (stepNumber === 4) {
+        btnNext.classList.add('hidden');
+        btnSubmit.classList.remove('hidden');
+        resizeSignatureCanvas();
+      } else {
+        btnNext.classList.remove('hidden');
+        btnSubmit.classList.add('hidden');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextStep() {
+      if (validateCurrentStep(currentStep)) {
+        if (currentStep < 4) showStep(currentStep + 1);
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) showStep(currentStep - 1);
+    }
+
+    function validateCurrentStep(step) {
+      if (step === 1) {
+        const nik = document.getElementById('nik').value.trim();
+        const nama = document.getElementById('nama_lengkap').value.trim();
+        const tempat = document.getElementById('tempat_lahir').value.trim();
+        const tgl = document.getElementById('tanggal_lahir').value;
+        const hp = document.getElementById('no_hp').value.trim();
+        const pekerjaan = document.getElementById('pekerjaan').value;
+        const alamat = document.getElementById('alamat').value.trim();
+
+        if (!nik || nik.length < 16) {
+          showToast('NIK wajib 16 digit sesuai e-KTP', 'error');
+          return false;
+        }
+        if (!nama || !tempat || !tgl || !hp || !pekerjaan || !alamat) {
+          showToast('Mohon lengkapi semua kolom bertanda bintang (*)', 'error');
+          return false;
+        }
+      } else if (step === 2) {
+        const ktpSrc = document.getElementById('preview-ktp').src;
+        if (!ktpSrc || ktpSrc === window.location.href) {
+          showToast('Silakan unggah foto e-KTP terlebih dahulu', 'error');
+          return false;
+        }
+      }
+      return true;
+    }
+
+    /* ================================================================
+       4. DIGITAL SIGNATURE PAD LOGIC
+    ================================================================ */
+    const canvas = document.getElementById('signature-canvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let hasSignature = false;
+
+    function resizeSignatureCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      if (canvas.width !== rect.width && rect.width > 0) {
+        const temp = document.createElement('canvas');
+        temp.width = canvas.width;
+        temp.height = canvas.height;
+        temp.getContext('2d').drawImage(canvas, 0, 0);
+
+        canvas.width = rect.width;
+        canvas.height = 160;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = '#073824';
+        ctx.lineWidth = 2.5;
+
+        if (hasSignature) {
+          ctx.drawImage(temp, 0, 0, canvas.width, canvas.height);
+        }
+      } else {
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = '#073824';
+        ctx.lineWidth = 2.5;
+      }
+    }
+
+    function getCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const cx = e.touches ? e.touches[0].clientX : e.clientX;
+      const cy = e.touches ? e.touches[0].clientY : e.clientY;
+      return { x: cx - rect.left, y: cy - rect.top };
+    }
+
+    function startDraw(e) {
+      isDrawing = true;
+      hasSignature = true;
+      document.getElementById('signature-placeholder').classList.add('hidden');
+      const p = getCoords(e);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      if (e.cancelable && e.type.startsWith('touch')) e.preventDefault();
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      const p = getCoords(e);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      if (e.cancelable && e.type.startsWith('touch')) e.preventDefault();
+    }
+
+    function stopDraw() {
+      if (isDrawing) {
+        isDrawing = false;
+        ctx.closePath();
+      }
+    }
+
+    function clearSignatureCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      hasSignature = false;
+      document.getElementById('signature-placeholder').classList.remove('hidden');
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    window.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('touchstart', startDraw, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    window.addEventListener('touchend', stopDraw);
+
+    /* ================================================================
+       5. SIMPANAN CALCULATION & UPLOAD HANDLER
+    ================================================================ */
+    function updateTotalSetoran() {
+      const pokok = 25000;
+      const wajib = parseInt(document.getElementById('pilihan_simpanan_wajib').value) || 10000;
+      const sukarelaInput = document.getElementById('sukarela_input');
+      const sukarela = sukarelaInput ? (parseInt(sukarelaInput.value, 10) || 0) : 0;
+      const total = pokok + wajib + sukarela;
+      document.getElementById('label-total-setoran').innerText = 'Rp ' + total.toLocaleString('id-ID');
+    }
+
+    function previewUpload(input, imgId, boxId) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById(imgId);
+          img.src = e.target.result;
+          img.classList.remove('hidden');
+          document.getElementById(boxId).classList.add('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    /* ================================================================
+       6. SUBMISSION & REGISTRATION TICKET
+    ================================================================ */
+    function submitRegistration() {
+      const agreed = document.getElementById('check-persetujuan').checked;
+      if (!agreed) {
+        showToast('Centang persetujuan AD/ART Koperasi HOS Tjokroaminoto', 'error');
+        return;
+      }
+      if (!hasSignature) {
+        showToast('Mohon bubuhkan tanda tangan digital Anda', 'error');
+        return;
+      }
+
+      const regId = "REG-2026-" + Math.floor(1000 + Math.random() * 9000);
+      const nama = document.getElementById('nama_lengkap').value;
+      const nik = document.getElementById('nik').value;
+      const tempat = document.getElementById('tempat_lahir').value;
+      const tgl = document.getElementById('tanggal_lahir').value;
+      const gender = document.querySelector('input[name="jenis_kelamin"]:checked').value;
+      const pekerjaan = document.getElementById('pekerjaan').value;
+      const hp = document.getElementById('no_hp').value;
+      const email = document.getElementById('email').value || '-';
+      const alamat = document.getElementById('alamat').value;
+      const simpananWajib = parseInt(document.getElementById('pilihan_simpanan_wajib').value);
+      const simpananSukarelaInput = document.getElementById('sukarela_input');
+      const simpananSukarela = simpananSukarelaInput ? (parseInt(simpananSukarelaInput.value, 10) || 0) : 0;
+      const metode = document.querySelector('input[name="metode_bayar"]:checked').value;
+      const buktiBayarInput = document.getElementById('file-bukti');
+      const buktiBayarPreview = document.getElementById('preview-bukti').src;
+      const signatureData = canvas.toDataURL("image/png");
+      const ktpData = document.getElementById('preview-ktp').src;
+
+      const newMember = {
+        id: regId,
+        nia: "-",
+        nama: nama,
+        nik: nik,
+        ttl: `${tempat}, ${tgl}`,
+        gender: gender,
+        pekerjaan: pekerjaan,
+        hp: hp,
+        email: email,
+        alamat: alamat,
+        simpananPokok: 25000,
+        simpananWajib: simpananWajib,
+        simpananSukarela: simpananSukarela,
+        metode: metode,
+        status: "Menunggu",
+        statusBayar: "Belum",
+        tanggalDaftar: "Hari ini",
+        ktpUrl: ktpData,
+        buktiBayarUrl: buktiBayarPreview && buktiBayarPreview.startsWith("data:") ? buktiBayarPreview : "",
+        ttdUrl: signatureData
+      };
+
+      applicants.unshift(newMember);
+
+      document.getElementById('membership-form').classList.add('hidden');
+      document.getElementById('wizard-progress-card').classList.add('hidden');
+      document.getElementById('success-screen').classList.remove('hidden');
+
+      document.getElementById('succ-reg-no').innerText = regId;
+      document.getElementById('succ-nama').innerText = nama;
+      document.getElementById('succ-nik').innerText = nik;
+      document.getElementById('succ-waktu').innerText = new Date().toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+
+      showToast('Pendaftaran Anda berhasil tercatat di Koperasi HOS Tjokroaminoto!', 'success');
+    }
+
+    function resetWizard() {
+      document.getElementById('membership-form').reset();
+      clearSignatureCanvas();
+      document.getElementById('preview-ktp').classList.add('hidden');
+      document.getElementById('box-ktp').classList.remove('hidden');
+      document.getElementById('preview-selfie').classList.add('hidden');
+      document.getElementById('box-selfie').classList.remove('hidden');
+      
+      document.getElementById('success-screen').classList.add('hidden');
+      document.getElementById('membership-form').classList.remove('hidden');
+      document.getElementById('wizard-progress-card').classList.remove('hidden');
+      showStep(1);
+    }
+
+    function downloadBukti() {
+      showToast('Kartu registrasi berhasil disimpan. Tunjukkan ke pengurus saat validasi.', 'success');
+    }
+
+    /* ================================================================
+       7. ADMIN DASHBOARD & STANDEE QR CODE GENERATOR
+    ================================================================ */
+    function regenerateRecruitmentQR() {
+      const eventTag = document.getElementById('qr-event-tag').value || 'REKRUTMEN-TJOKRO';
+      const officer = document.getElementById('qr-officer-name').value || 'Pengurus';
+      document.getElementById('qr-display-tag').innerText = `Ref: ${eventTag} (${officer})`;
+
+      const linkQR = `${window.location.origin}/daftar?ref=${encodeURIComponent(eventTag)}`;
+
+      const box = document.getElementById('qrcode-canvas');
+      box.innerHTML = "";
+
+      if (typeof QRCode !== 'undefined') {
+        new QRCode(box, {
+          text: linkQR,
+          width: 140,
+          height: 140,
+          colorDark: "#073824",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      }
+    }
+
+    function runPrint(mode) {
+      document.body.classList.remove('print-mode-qr', 'print-mode-list', 'print-mode-detail');
+      document.body.classList.add('print-mode-' + mode);
+      var cleanup = function () {
+        document.body.classList.remove('print-mode-' + mode);
+        window.removeEventListener('afterprint', cleanup);
+      };
+      window.addEventListener('afterprint', cleanup);
+      window.print();
+    }
+
+    function printStandeeQR() {
+      runPrint('qr');
+    }
+
+    /* ================================================================
+       7b. CETAK DAFTAR PENDAFTAR & FORMULIR PER ANGGOTA
+    ================================================================ */
+    function getFilteredApplicants() {
+      const q = document.getElementById('admin-search-input').value.toLowerCase();
+      const st = document.getElementById('admin-filter-status').value;
+      return applicants.filter(app => {
+        const matchQ = app.nama.toLowerCase().includes(q) || app.nik.includes(q) || app.id.toLowerCase().includes(q);
+        const matchSt = (st === 'ALL') || (app.status === st);
+        return matchQ && matchSt;
+      });
+    }
+
+    function printKopHtml(title, subtitle) {
+      return `
+        <div class="print-kop">
+          <img src="Pendaftaran-Anggota/public/logo-koperasi.png" alt="Logo Koperasi">
+          <div>
+            <h1>KOPERASI KONSUMEN HOS TJOKROAMINOTO</h1>
+            <p>Purwakarta Istimewa &bull; "Bersama Membangun, Sejahtera Bersama"</p>
+            <h2>${title}</h2>
+            <p>${subtitle}</p>
+          </div>
+        </div>`;
+    }
+
+    function printApplicantList() {
+      const list = getFilteredApplicants();
+      if (!list.length) { showToast('Tidak ada data pendaftar untuk dicetak', 'error'); return; }
+
+      const q = document.getElementById('admin-search-input').value;
+      const st = document.getElementById('admin-filter-status').value;
+      const filterLabel = st === 'ALL' ? 'Semua Status' : st;
+      const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      const subtitle = `Filter: ${filterLabel}${q ? ' &bull; Pencarian: "' + q + '"' : ''} &bull; Dicetak: ${today} &bull; Total: ${list.length} orang`;
+
+      const rowsHtml = list.map((a, i) => `
+        <tr>
+          <td style="text-align:center">${i + 1}</td>
+          <td>${a.id}<br>${a.nia}</td>
+          <td><strong>${a.nama}</strong><br>NIK: ${a.nik}<br>${a.ttl}</td>
+          <td>${a.hp}<br>${a.pekerjaan}</td>
+          <td>Rp ${(a.simpananPokok + a.simpananWajib).toLocaleString('id-ID')}<br>${a.metode}</td>
+          <td>${a.status}</td>
+          <td style="min-width:90px"></td>
+        </tr>`).join('');
+
+      document.getElementById('print-sheet').innerHTML = `
+        ${printKopHtml('DAFTAR PENDAFTAR CALON ANGGOTA', subtitle)}
+        <table class="print-table">
+          <thead>
+            <tr><th>No</th><th>No. Registrasi / NIA</th><th>Nama / NIK</th><th>Kontak</th><th>Setoran (Pokok+Wajib)</th><th>Status</th><th>TTD Pengurus</th></tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+        <div class="print-sign-row">
+          <div class="print-sign-box">
+            <p>Mengetahui,</p>
+            <p style="font-weight:700">Ketua Koperasi</p>
+            <div class="print-sign-space"></div>
+            <p>( ........................................ )</p>
+          </div>
+          <div class="print-sign-box" style="text-align:right">
+            <p>Purwakarta, ${today}</p>
+            <p style="font-weight:700">Petugas Verifikasi</p>
+            <div class="print-sign-space"></div>
+            <p>( ........................................ )</p>
+          </div>
+        </div>`;
+      runPrint('list');
+    }
+
+    function printApplicantFromModal() {
+      if (!selectedApplicantId) return;
+      const a = applicants.find(x => x.id === selectedApplicantId);
+      if (!a) return;
+
+      const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      const row = (label, value) => `<tr><td class="print-label">${label}</td><td class="print-sep">:</td><td>${value}</td></tr>`;
+
+      document.getElementById('print-sheet').innerHTML = `
+        ${printKopHtml('FORMULIR VERIFIKASI CALON ANGGOTA', `No. Registrasi: ${a.id} &bull; Status: ${a.status}`)}
+        <table class="print-detail-table">
+          <tbody>
+            ${row('Nama Lengkap', '<strong>' + a.nama + '</strong>')}
+            ${row('NIK e-KTP', a.nik)}
+            ${row('Nomor Induk Anggota (NIA)', a.nia)}
+            ${row('Tempat, Tanggal Lahir', a.ttl)}
+            ${row('Jenis Kelamin', a.gender)}
+            ${row('Pekerjaan', a.pekerjaan)}
+            ${row('No. WhatsApp', a.hp)}
+            ${row('Email', a.email)}
+            ${row('Alamat Domisili', a.alamat)}
+            ${row('Simpanan Pokok', 'Rp ' + a.simpananPokok.toLocaleString('id-ID'))}
+            ${row('Simpanan Wajib', 'Rp ' + a.simpananWajib.toLocaleString('id-ID') + ' / bulan')}
+            ${row('Total Setoran Awal', '<strong>Rp ' + (a.simpananPokok + a.simpananWajib).toLocaleString('id-ID') + '</strong>')}
+            ${row('Metode Pembayaran', a.metode)}
+            ${row('Tanggal Daftar', a.tanggalDaftar)}
+          </tbody>
+        </table>
+        <div class="print-sign-row">
+          <div class="print-sign-box">
+            <p>Calon Anggota,</p>
+            <div class="print-sign-space"></div>
+            <p style="font-weight:700">( ${a.nama} )</p>
+          </div>
+          <div class="print-sign-box" style="text-align:right">
+            <p>Purwakarta, ${today}</p>
+            <p style="font-weight:700">Pengurus Koperasi</p>
+            <div class="print-sign-space"></div>
+            <p>( ........................................ )</p>
+          </div>
+        </div>`;
+      runPrint('detail');
+    }
+
+    function simulateScanMember() {
+      switchMainView('member');
+      resetWizard();
+      showToast('Simulasi: Halaman formulir terbuka otomatis di HP calon anggota!', 'info');
+    }
+
+    function updateStatistics() {
+      const total = applicants.length;
+      const pending = applicants.filter(a => a.status === 'Menunggu').length;
+      const approved = applicants.filter(a => a.status === 'Disetujui').length;
+      const rejected = applicants.filter(a => a.status === 'Ditolak').length;
+
+      document.getElementById('stat-total').innerText = total;
+      document.getElementById('stat-pending').innerText = pending;
+      document.getElementById('stat-approved').innerText = approved;
+      document.getElementById('stat-rejected').innerText = rejected;
+    }
+
+    function renderApplicantsTable(data = null) {
+      const tbody = document.getElementById('applicant-table-body');
+      const empty = document.getElementById('table-empty-state');
+      const list = data || applicants;
+
+      tbody.innerHTML = '';
+      if (list.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      list.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+
+        let badgeClass = "bg-amber-100 text-amber-800";
+        if (item.status === 'Disetujui') badgeClass = "bg-emerald-100 text-emerald-800";
+        if (item.status === 'Ditolak') badgeClass = "bg-rose-100 text-rose-800";
+
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-mono font-semibold text-slate-700">
+            ${item.id}
+            <div class="text-[10px] text-slate-400 font-normal">${item.tanggalDaftar}</div>
+          </td>
+          <td class="py-3 px-4">
+            <div class="font-bold text-slate-900">${item.nama}</div>
+            <div class="text-[11px] text-slate-500 font-mono">NIK: ${item.nik}</div>
+          </td>
+          <td class="py-3 px-4">
+            <a href="https://wa.me/${item.hp.replace(/^0/, '62')}" target="_blank" class="text-emerald-700 hover:text-emerald-800 font-semibold inline-flex items-center gap-1">
+              <i class="fa-brands fa-whatsapp text-emerald-600"></i> ${item.hp}
+            </a>
+          </td>
+          <td class="py-3 px-4 text-slate-600">
+            ${item.pekerjaan}
+          </td>
+          <td class="py-3 px-4">
+            <span class="font-mono font-bold text-slate-800">Rp ${(item.simpananPokok + item.simpananWajib).toLocaleString('id-ID')}</span>
+            <div class="text-[10px] text-slate-400">${item.metode}</div>
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${badgeClass}">
+              ${item.status}
+            </span>
+            <div class="font-mono text-[10px] text-tjokro-darkgreen font-bold mt-0.5">${item.nia}</div>
+          </td>
+          <td class="py-3 px-4 text-center">
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="openApplicantDetail('${item.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-[11px] flex items-center gap-1 transition">
+                <i class="fa-regular fa-eye"></i> Detail
+              </button>
+              ${item.status === 'Menunggu' ? `
+                <button onclick="quickApprove('${item.id}')" title="Setujui Cepat" class="w-7 h-7 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-xl transition flex items-center justify-center">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterApplicantsTable() {
+      const q = document.getElementById('admin-search-input').value.toLowerCase();
+      const st = document.getElementById('admin-filter-status').value;
+
+      const filtered = applicants.filter(app => {
+        const matchQ = app.nama.toLowerCase().includes(q) || app.nik.includes(q) || app.id.toLowerCase().includes(q);
+        const matchSt = (st === 'ALL') || (app.status === st);
+        return matchQ && matchSt;
+      });
+
+      renderApplicantsTable(filtered);
+    }
+
+    /* ================================================================
+       8. EXPORT KE EXCEL / CSV (INTEGRASI KE SOFTWARE KOPERASI)
+    ================================================================ */
+    function exportToCSV() {
+      if (applicants.length === 0) {
+        showToast('Tidak ada data anggota untuk diekspor', 'error');
+        return;
+      }
+
+      // Format header tabel cocok untuk impor Core Koperasi (Kuelap / Kledo / Excel)
+      const headers = [
+        "No Registrasi",
+        "Nomor Induk Anggota (NIA)",
+        "Nama Lengkap Sesuai KTP",
+        "NIK",
+        "Jenis Kelamin",
+        "Tempat Lahir",
+        "No WhatsApp",
+        "Email",
+        "Pekerjaan",
+        "Alamat Lengkap",
+        "Simpanan Pokok (Rp)",
+        "Simpanan Wajib (Rp)",
+        "Metode Pembayaran",
+        "Status Verifikasi"
+      ];
+
+      const rows = applicants.map(a => [
+        `"${a.id}"`,
+        `"${a.nia}"`,
+        `"${a.nama.replace(/"/g, '""')}"`,
+        `"'${a.nik}"`, // apostrophe to keep numeric string in excel
+        `"${a.gender}"`,
+        `"${a.ttl}"`,
+        `"'${a.hp}"`,
+        `"${a.email}"`,
+        `"${a.pekerjaan}"`,
+        `"${a.alamat.replace(/"/g, '""')}"`,
+        a.simpananPokok,
+        a.simpananWajib,
+        `"${a.metode}"`,
+        `"${a.status}"`
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" 
+        + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Data_Anggota_Koperasi_HOS_Tjokroaminoto_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      showToast('File CSV berhasil diunduh! Siap diimpor ke software koperasi.', 'success');
+    }
+
+    /* ================================================================
+       9. MODAL DETAIL & ACTION HANDLERS
+    ================================================================ */
+    function openApplicantDetail(id) {
+      const applicant = applicants.find(a => a.id === id);
+      if (!applicant) return;
+
+      selectedApplicantId = id;
+      document.getElementById('modal-reg-no').innerText = applicant.id;
+      document.getElementById('m-nama').innerText = applicant.nama;
+      document.getElementById('m-nik').innerText = applicant.nik;
+      document.getElementById('m-gender').innerText = applicant.gender;
+      document.getElementById('m-ttl').innerText = applicant.ttl;
+      document.getElementById('m-wa').innerText = applicant.hp;
+      document.getElementById('m-pekerjaan').innerText = applicant.pekerjaan;
+      document.getElementById('m-alamat').innerText = applicant.alamat;
+      document.getElementById('m-simpanan-wajib').innerText = 'Rp ' + applicant.simpananWajib.toLocaleString('id-ID');
+      document.getElementById('m-metode').innerText = applicant.metode;
+      document.getElementById('m-img-ktp').src = applicant.ktpUrl;
+      document.getElementById('m-img-ttd').src = applicant.ttdUrl;
+
+      const btnApprove = document.getElementById('modal-btn-approve');
+      const btnReject = document.getElementById('modal-btn-reject');
+
+      if (applicant.status === 'Disetujui') {
+        btnApprove.classList.add('hidden');
+        btnReject.classList.remove('hidden');
+      } else if (applicant.status === 'Ditolak') {
+        btnApprove.classList.remove('hidden');
+        btnReject.classList.add('hidden');
+      } else {
+        btnApprove.classList.remove('hidden');
+        btnReject.classList.remove('hidden');
+      }
+
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+      selectedApplicantId = null;
+    }
+
+    function changeStatusFromModal(newStatus) {
+      if (!selectedApplicantId) return;
+      const app = applicants.find(a => a.id === selectedApplicantId);
+      if (app) {
+        app.status = newStatus;
+        if (newStatus === 'Disetujui' && (app.nia === '-' || !app.nia)) {
+          app.nia = 'NIA-PWK-26' + Math.floor(1000 + Math.random() * 9000);
+        }
+        showToast(`Status berhasil diperbarui menjadi ${newStatus}`, newStatus === 'Disetujui' ? 'success' : 'info');
+      }
+      closeDetailModal();
+      renderApplicantsTable();
+      updateStatistics();
+    }
+
+    function quickApprove(id) {
+      const app = applicants.find(a => a.id === id);
+      if (app) {
+        app.status = 'Disetujui';
+        app.nia = 'NIA-PWK-26' + Math.floor(1000 + Math.random() * 9000);
+        showToast(`${app.nama} disetujui! NIA diterbitkan: ${app.nia}`, 'success');
+        renderApplicantsTable();
+        updateStatistics();
+      }
+    }
+
+    /* ================================================================
+       10. TOAST NOTIFICATION UTILITY
+    ================================================================ */
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-msg');
+      const icon = document.getElementById('toast-icon');
+
+      msg.innerText = message;
+      if (type === 'success') {
+        icon.className = 'fa-solid fa-circle-check text-tjokro-accentgold text-base';
+      } else if (type === 'error') {
+        icon.className = 'fa-solid fa-circle-exclamation text-rose-400 text-base';
+      } else {
+        icon.className = 'fa-solid fa-circle-info text-blue-400 text-base';
+      }
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3500);
+    }
+
+    /* ================================================================
+       11. INITIALIZATION ON PAGE LOAD
+    ================================================================ */
+    window.addEventListener('load', () => {
+      regenerateRecruitmentQR();
+      updateTotalSetoran();
+      window.addEventListener('resize', () => {
+        if (currentStep === 4) resizeSignatureCanvas();
+      });
+    });
+  </script>
+</body>
+</html>
