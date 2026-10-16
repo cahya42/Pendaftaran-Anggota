@@ -49,25 +49,27 @@ export default function Header({ view, onSwitch }) {
             <span className="sm:hidden block">&quot;Bersama Membangun, Sejahtera Bersama&quot;</span>
           </p>
 
-          {/* Baris 3: 2 tombol sejajar di bawah tagline */}
-          <div className="flex gap-2 w-full">
-            <button
-              onClick={() => onSwitch('member')}
-              className={`${view === 'member' ? btnActive : btnIdle} flex-1`}
-            >
-              <i className="fa-solid fa-qrcode text-tjokro-accentgold"></i>
-              <span className="hidden sm:inline">Formulir Calon Anggota</span>
-              <span className="sm:inline-block sm:hidden">Form QR</span>
-            </button>
-            <button
-              onClick={() => onSwitch('admin')}
-              className={`${view === 'admin' ? btnActive : btnIdle} flex-1`}
-            >
-              <i className="fa-solid fa-users-gear text-xs"></i>
-              <span className="hidden sm:inline">Panel Pengurus</span>
-              <span className="sm:inline-block sm:hidden">Admin</span>
-            </button>
-          </div>
+          {/* Baris 3: 2 tombol — hanya tampil untuk admin (view === 'admin') */}
+          {view === 'admin' && (
+            <div className="flex gap-2 w-full">
+              <button
+                onClick={() => onSwitch('member')}
+                className={`${view === 'member' ? btnActive : btnIdle} flex-1`}
+              >
+                <i className="fa-solid fa-qrcode text-tjokro-accentgold"></i>
+                <span className="hidden sm:inline">Formulir Calon Anggota</span>
+                <span className="sm:inline-block sm:hidden">Form QR</span>
+              </button>
+              <button
+                onClick={() => onSwitch('admin')}
+                className={`${view === 'admin' ? btnActive : btnIdle} flex-1`}
+              >
+                <i className="fa-solid fa-users-gear text-xs"></i>
+                <span className="hidden sm:inline">Panel Pengurus</span>
+                <span className="sm:inline-block sm:hidden">Admin</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>
