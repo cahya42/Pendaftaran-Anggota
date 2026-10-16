@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { PILIHAN_WAJIB, SIMPANAN_POKOK } from '../../data/applicants.js';
-import { formatRupiah, readFileAsDataURL } from '../../utils/helpers.js';
+import { formatRupiah, readFileAsCompressedDataURL } from '../../utils/helpers.js';
 
 export default function Step3Simpanan({ form, setForm }) {
   const sukarela = Number(form.simpananSukarela || 0);
@@ -120,7 +120,7 @@ export default function Step3Simpanan({ form, setForm }) {
             onChange={async (e) => {
               const f = e.target.files?.[0];
               if (!f) return;
-              const dataUrl = await readFileAsDataURL(f);
+              const dataUrl = await readFileAsCompressedDataURL(f);
               setForm((p) => ({ ...p, buktiBayarPreview: dataUrl }));
             }}
           />

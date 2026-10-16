@@ -52,4 +52,5 @@ create policy "public insert applicants"
 drop policy if exists "public update applicants" on public.applicants;
 create policy "public update applicants"
   on public.applicants for update
-  using (true);
+  using (true)
+  with check (true);

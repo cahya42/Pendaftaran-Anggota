@@ -32,6 +32,7 @@ export default function MemberView({ onAddApplicant, notify }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [ticket, setTicket] = useState(null);
   const [hasSignature, setHasSignature] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const canvasRef = useRef(null);
 
   const validateStep = (step) => {
@@ -67,6 +68,7 @@ export default function MemberView({ onAddApplicant, notify }) {
   };
 
   const submit = async () => {
+    if (submitting) return;
     if (!form.agreed) {
       notify('Centang persetujuan AD/ART Koperasi HOS Tjokroaminoto', 'error');
       return;
@@ -101,10 +103,18 @@ export default function MemberView({ onAddApplicant, notify }) {
       buktiBayarUrl: form.buktiBayarPreview || '',
       ttdUrl: signatureData,
     };
-    const saved = await onAddApplicant(newMember);
-    const finalId = saved?.id || regId;
-    setTicket({ id: finalId, nama: form.nama, nik: form.nik, tanggalDaftar: today });
-    notify('Pendaftaran Anda berhasil tercatat di Koperasi HOS Tjokroaminoto!', 'success');
+    setSubmitting(true);
+    try {
+      const saved = await onAddApplicant(newMember);
+      const finalId = saved?.id || regId;
+      setTicket({ id: finalId, nama: form.nama, nik: form.nik, tanggalDaftar: today });
+      notify('Pendaftaran Anda berhasil tercatat di Koperasi HOS Tjokroaminoto!', 'success');
+    } catch (err) {
+      console.error('[daftar] simpan gagal:', err?.message || err);
+      notify('GAGAL menyimpan ke database: ' + (err?.message || 'koneksi Supabase bermasalah') + '. Data belum tercatat — coba lagi.', 'error');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const reset = () => {
@@ -152,11 +162,11 @@ export default function MemberView({ onAddApplicant, notify }) {
               </button>
             ) : (
               <button
-                type="button" onClick={submit}
-                className="px-7 py-2.5 rounded-2xl bg-gradient-to-r from-tjokro-green to-tjokro-lightgreen hover:from-tjokro-darkgreen hover:to-tjokro-green text-white font-bold text-xs shadow-lg shadow-tjokro-green/30 transition flex items-center gap-2"
+                type="button" onClick={submit} disabled={submitting}
+                className="px-7 py-2.5 rounded-2xl bg-gradient-to-r from-tjokro-green to-tjokro-lightgreen hover:from-tjokro-darkgreen hover:to-tjokro-green text-white font-bold text-xs shadow-lg shadow-tjokro-green/30 transition flex items-center gap-2 disabled:opacity-60"
               >
-                <i className="fa-solid fa-paper-plane text-tjokro-accentgold"></i>
-                <span>Kirim Pendaftaran</span>
+                <i className={`fa-solid ${submitting ? 'fa-circle-notch fa-spin' : 'fa-paper-plane'} text-tjokro-accentgold`}></i>
+                <span>{submitting ? 'Menyimpan...' : 'Kirim Pendaftaran'}</span>
               </button>
             )}
           </div>

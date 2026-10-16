@@ -16,7 +16,7 @@ export default function App() {
     if (path === '/daftar' || path.endsWith('/daftar')) return 'member';
     return 'admin';
   });
-  const [applicants, setApplicants] = useState(INITIAL_APPLICANTS);
+  const [applicants, setApplicants] = useState(SUPABASE_READY ? [] : INITIAL_APPLICANTS);
   const [loading, setLoading] = useState(SUPABASE_READY);
   const [dbOnline, setDbOnline] = useState(false);
   const [toast, setToast] = useState(null);
@@ -26,10 +26,15 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (!SUPABASE_READY) return;
+    if (!SUPABASE_READY) {
+      setLoading(false);
+      return;
+    }
     fetchApplicants()
       .then((rows) => {
-        if (rows.length > 0) setApplicants(rows);
+        // Koneksi OK -> tandai online walau tabel masih kosong,
+        // dan pakai data DB apa adanya (jangan campur data contoh).
+        setApplicants(rows);
         setDbOnline(true);
       })
       .catch((err) => {
@@ -40,16 +45,23 @@ export default function App() {
   }, []);
 
   const addApplicant = async (member) => {
-    setApplicants((prev) => [member, ...prev]);
-    if (!dbOnline) return member;
+    // Mode lokal (tanpa .env): simpan di memori saja.
+    if (!SUPABASE_READY) {
+      setApplicants((prev) => [member, ...prev]);
+      return member;
+    }
+    // Mode Supabase: insert DULU, baru tampilkan. Jangan optimistic-update
+    // sebelum insert sukses — itu yang bikin "kelihatan berhasil" padahal gagal.
     try {
       const saved = await insertApplicant(member);
-      setApplicants((prev) => prev.map((a) => (a.id === member.id ? saved : a)));
-      return saved;
+      const finalRow = saved || member;
+      setApplicants((prev) => [finalRow, ...prev]);
+      setDbOnline(true);
+      return finalRow;
     } catch (err) {
       console.error('[supabase] insert gagal:', err.message);
-      notify('Gagal menyimpan ke Supabase: ' + err.message, 'error');
-      return member;
+      // Lempar ke form agar SuccessCard TIDAK tampil saat gagal.
+      throw err;
     }
   };
 

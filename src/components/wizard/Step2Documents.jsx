@@ -1,11 +1,11 @@
 import { useRef } from 'react';
-import { readFileAsDataURL } from '../../utils/helpers.js';
+import { readFileAsCompressedDataURL } from '../../utils/helpers.js';
 
 function UploadBox({ label, hint, note, noteIcon, preview, accentBox, onFile }) {
   const inputRef = useRef(null);
   const handleChange = async (e) => {
     const f = e.target.files?.[0];
-    if (f) onFile(await readFileAsDataURL(f));
+    if (f) onFile(await readFileAsCompressedDataURL(f));
   };
   return (
     <div className="space-y-2">

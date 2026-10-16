@@ -73,3 +73,29 @@ export function readFileAsDataURL(file) {
     reader.readAsDataURL(file);
   });
 }
+
+// Kompres gambar ke max 900px & JPEG 0.7 agar muat di kolom text Supabase
+// (base64 foto HP asli bisa 3–8 MB → insert ditolak / payload too large).
+export function readFileAsCompressedDataURL(file, maxDim = 900, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        const scale = Math.min(1, maxDim / Math.max(width, height));
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
