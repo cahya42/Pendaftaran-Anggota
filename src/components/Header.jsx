@@ -45,14 +45,11 @@ export default function Header({ view, onSwitch }) {
               <span className="text-[10px] sm:text-xs font-semibold text-tjokro-gold mt-0.5 leading-none">
                 PURWAKARTA ISTIMEWA
               </span>
+              <span className="text-[10px] sm:text-xs font-semibold text-tjokro-gold mt-0.5 leading-none">
+                &quot;Bersama Membangun, Sejahtera Bersama&quot;
+              </span>
             </div>
           </div>
-
-          {/* Baris 2: Tagline di bawah */}
-          <p className="text-[10px] sm:text-xs font-semibold text-tjokro-gold flex items-center gap-1 w-full">
-            <span className="hidden sm:inline">&quot;Bersama Membangun, Sejahtera Bersama&quot;</span>
-            <span className="sm:hidden block">&quot;Bersama Membangun, Sejahtera Bersama&quot;</span>
-          </p>
 
           {/* Baris 3: Tombol navigasi — hanya di halaman utama, SELALU 2 tombol (Daftar + Admin) */}
           {!isDaftarPage && (

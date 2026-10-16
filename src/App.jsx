@@ -180,9 +180,6 @@ export default function App() {
   return (
     <div className="bg-slate-100 text-slate-800 font-sans min-h-screen antialiased flex flex-col selection:bg-tjokro-green selection:text-white">
       <Header view={view} onSwitch={setView} />
-      <div className="bg-tjokro-mint border-b border-tjokro-green/10 px-4 py-2 sm:hidden text-center text-[11px] font-semibold text-tjokro-darkgreen">
-        <i className="fa-solid fa-bullhorn text-tjokro-gold mr-1.5"></i> &quot;Bersama Membangun, Sejahtera Bersama&quot;
-      </div>
       {!SUPABASE_READY && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-[11px] font-semibold text-amber-800">
           <i className="fa-solid fa-triangle-exclamation mr-1.5"></i>
