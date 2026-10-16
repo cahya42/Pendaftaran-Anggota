@@ -4,7 +4,7 @@ import Toast from './components/Toast.jsx';
 import MemberView from './components/wizard/MemberView.jsx';
 import AdminPanel from './components/admin/AdminPanel.jsx';
 import { INITIAL_APPLICANTS } from './data/applicants.js';
-import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus } from './lib/applicantsService.js';
+import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus, deleteApplicant, updateApplicant } from './lib/applicantsService.js';
 import { generateNia } from './utils/helpers.js';
 
 const SUPABASE_READY = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
@@ -83,6 +83,50 @@ export default function App() {
     }
   };
 
+  const removeApplicant = async (id) => {
+    const target = applicants.find((a) => a.id === id);
+    // Hapus dari layar dulu agar responsif, simpan cadangan untuk rollback.
+    setApplicants((prev) => prev.filter((a) => a.id !== id));
+    if (!dbOnline) {
+      notify(`Data ${target?.nama || id} dihapus dari daftar lokal.`, 'info');
+      return true;
+    }
+    try {
+      await deleteApplicant(id);
+      notify(`Data ${target?.nama || id} dihapus permanen dari database.`, 'success');
+      return true;
+    } catch (err) {
+      console.error('[supabase] delete gagal:', err.message);
+      // Rollback: kembalikan data ke layar karena DB menolak hapus
+      // (umumnya karena RLS belum mengizinkan DELETE).
+      if (target) setApplicants((prev) => [target, ...prev]);
+      notify('Gagal menghapus di Supabase: ' + err.message + ' — kemungkinan policy DELETE belum ada. Jalankan SQL delete-policy di supabase-applicants.sql.', 'error');
+      return false;
+    }
+  };
+
+  const editApplicant = async (id, patch) => {
+    const target = applicants.find((a) => a.id === id);
+    if (!target) return false;
+    const merged = { ...target, ...patch };
+    setApplicants((prev) => prev.map((a) => (a.id === id ? merged : a)));
+    if (!dbOnline) {
+      notify(`Data ${target.nama} diperbarui (lokal).`, 'success');
+      return true;
+    }
+    try {
+      const saved = await updateApplicant(id, patch);
+      if (saved) setApplicants((prev) => prev.map((a) => (a.id === id ? saved : a)));
+      notify(`Data ${merged.nama} berhasil diperbarui.`, 'success');
+      return true;
+    } catch (err) {
+      console.error('[supabase] edit gagal:', err.message);
+      setApplicants((prev) => prev.map((a) => (a.id === id ? target : a)));
+      notify('Gagal menyimpan perubahan: ' + err.message, 'error');
+      return false;
+    }
+  };
+
   const changePaymentStatus = async (id, statusBayar) => {
     setApplicants((prev) => prev.map((a) => (a.id !== id ? a : { ...a, statusBayar })));
     notify(`Pembayaran ${id} ditandai: ${statusBayar === 'Lunas' ? 'LUNAS ✓' : 'Belum Lunas'}`, statusBayar === 'Lunas' ? 'success' : 'info');
@@ -124,6 +168,8 @@ export default function App() {
             applicants={applicants}
             onChangeStatus={changeStatus}
             onChangePaymentStatus={changePaymentStatus}
+            onDeleteApplicant={removeApplicant}
+            onEditApplicant={editApplicant}
             notify={notify}
             onPreviewHp={() => {
               window.location.href = '/daftar';

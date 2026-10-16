@@ -3,6 +3,7 @@ import QrStandee from './QrStandee.jsx';
 import ApplicantModal from './ApplicantModal.jsx';
 import StatCard from './AdminStats.jsx';
 import AdminToolbar from './AdminToolbar.jsx';
+import { DeleteConfirmDialog, EditApplicantDialog } from './AdminDialogs.jsx';
 import { ApplicantRows } from './ApplicantRows.jsx';
 import { PrintApplicantList, PrintApplicantDetail } from './PrintSheets.jsx';
 import { exportApplicantsToCSV } from '../../utils/helpers.js';
@@ -21,10 +22,13 @@ function doPrint(mode) {
   window.print();
 }
 
-export default function AdminPanel({ applicants, onChangeStatus, onChangePaymentStatus, notify, onPreviewHp }) {
+export default function AdminPanel({ applicants, onChangeStatus, onChangePaymentStatus, onDeleteApplicant, onEditApplicant, notify, onPreviewHp }) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('ALL');
   const [detailId, setDetailId] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [editTarget, setEditTarget] = useState(null);
+  const [busy, setBusy] = useState(false);
   const [eventTag, setEventTag] = useState('EVENT-PURWAKARTA-ISTIMEWA');
   const [officer, setOfficer] = useState('Pengurus Koperasi Konsumen HOS TJOKROAMINOTO PURWAKARTA ISTIMEWA');
   const [printDetailData, setPrintDetailData] = useState(null);
@@ -41,6 +45,41 @@ export default function AdminPanel({ applicants, onChangeStatus, onChangePayment
   const changeStatus = (id, status) => {
     setDetailId(null);
     onChangeStatus(id, status);
+  };
+
+  const askDelete = (id) => {
+    const target = applicants.find((a) => a.id === id);
+    if (target) setDeleteTarget(target);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTarget || busy) return;
+    setBusy(true);
+    try {
+      const ok = await onDeleteApplicant?.(deleteTarget.id);
+      if (ok !== false) {
+        setDeleteTarget(null);
+        setDetailId(null);
+      }
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const askEdit = (id) => {
+    const target = applicants.find((a) => a.id === id);
+    if (target) setEditTarget(target);
+  };
+
+  const confirmEdit = async (patch) => {
+    if (!editTarget || busy) return;
+    setBusy(true);
+    try {
+      const ok = await onEditApplicant?.(editTarget.id, patch);
+      if (ok !== false) setEditTarget(null);
+    } finally {
+      setBusy(false);
+    }
   };
 
   const onExport = () => {
@@ -76,12 +115,14 @@ export default function AdminPanel({ applicants, onChangeStatus, onChangePayment
             <thead className="bg-slate-50 text-slate-600 uppercase font-bold border-b border-slate-200 text-[11px]">
               <tr>{HEADERS.map((h) => (<th key={h} className="py-3.5 px-4">{h}</th>))}</tr>
             </thead>
-            <ApplicantRows rows={rows} onDetail={setDetailId} onQuickApprove={(id) => changeStatus(id, 'Disetujui')} />
+            <ApplicantRows rows={rows} onDetail={setDetailId} onQuickApprove={(id) => changeStatus(id, 'Disetujui')} onEdit={askEdit} onDelete={askDelete} />
           </table>
         </div>
         {rows.length === 0 && (<div className="p-8 text-center text-slate-400 text-xs"><i className="fa-regular fa-folder-open text-2xl mb-1 block"></i>Tidak ditemukan data pendaftar.</div>)}
       </div>
-      <ApplicantModal applicant={applicants.find((a) => a.id === detailId) || null} onClose={() => setDetailId(null)} onChangeStatus={changeStatus} onPrintDetail={onPrintDetail} onChangePaymentStatus={onChangePaymentStatus} />
+      <ApplicantModal applicant={applicants.find((a) => a.id === detailId) || null} onClose={() => setDetailId(null)} onChangeStatus={changeStatus} onPrintDetail={onPrintDetail} onChangePaymentStatus={onChangePaymentStatus} onEdit={(id) => { setDetailId(null); askEdit(id); }} onDelete={(id) => { setDetailId(null); askDelete(id); }} />
+      <DeleteConfirmDialog applicant={deleteTarget} busy={busy} onCancel={() => !busy && setDeleteTarget(null)} onConfirm={confirmDelete} />
+      <EditApplicantDialog applicant={editTarget} busy={busy} onCancel={() => !busy && setEditTarget(null)} onSave={confirmEdit} />
 
       {/* Lembar tersembunyi — hanya muncul saat Ctrl+P / tombol cetak */}
       <PrintApplicantList rows={rows} statusFilter={filter} search={search} printRef={printListRef} />

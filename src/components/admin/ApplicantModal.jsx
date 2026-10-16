@@ -1,6 +1,6 @@
 import { formatRupiah } from '../../utils/helpers.js';
 
-export default function ApplicantModal({ applicant, onClose, onChangeStatus, onPrintDetail, onChangePaymentStatus }) {
+export default function ApplicantModal({ applicant, onClose, onChangeStatus, onPrintDetail, onChangePaymentStatus, onEdit, onDelete }) {
   if (!applicant) return null;
   const lunas = applicant.statusBayar === 'Lunas';
   const sukarela = applicant.simpananSukarela || 0;
@@ -97,6 +97,12 @@ export default function ApplicantModal({ applicant, onClose, onChangeStatus, onP
               <i className="fa-solid fa-xmark"></i> Tolak / Berkas Kurang
             </button>
           )}
+          <button onClick={() => onEdit?.(applicant.id)} className="px-4 py-2 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold text-xs transition flex items-center gap-1.5">
+            <i className="fa-solid fa-pen"></i> Perbaiki Data
+          </button>
+          <button onClick={() => onDelete?.(applicant.id)} className="px-4 py-2 rounded-xl border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs transition flex items-center gap-1.5">
+            <i className="fa-solid fa-trash-can"></i> Hapus
+          </button>
         </div>
       </div>
     </div>

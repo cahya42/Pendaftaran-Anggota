@@ -60,3 +60,10 @@ create policy "public update applicants"
   on public.applicants for update
   using (true)
   with check (true);
+
+-- BARU: izin hapus untuk panel pengurus (tanpa ini tombol Hapus
+-- akan ditolak RLS walau konfirmasi sudah diklik).
+drop policy if exists "public delete applicants" on public.applicants;
+create policy "public delete applicants"
+  on public.applicants for delete
+  using (true);

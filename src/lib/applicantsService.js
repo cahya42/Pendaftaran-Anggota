@@ -119,3 +119,45 @@ export async function updatePaymentStatus(regNo, statusBayar) {
   const row = (data || [])[0];
   return row ? rowToApplicant(row) : null;
 }
+
+export async function deleteApplicant(regNo) {
+  const { error } = await supabase
+    .from(TABLE)
+    .delete()
+    .eq('reg_no', regNo);
+  if (error) throw error;
+  return true;
+}
+
+// Patch umum untuk edit data (nama, NIK, HP, alamat, pekerjaan, dll).
+// key App (camelCase) -> kolom DB (snake_case).
+const EDITABLE_MAP = {
+  nama: 'nama',
+  nik: 'nik',
+  ttl: 'ttl',
+  gender: 'gender',
+  pekerjaan: 'pekerjaan',
+  hp: 'hp',
+  email: 'email',
+  alamat: 'alamat',
+  simpananWajib: 'simpanan_wajib',
+  simpananSukarela: 'simpanan_sukarela',
+  metode: 'metode',
+};
+
+export async function updateApplicant(regNo, patchApp) {
+  const patch = {};
+  for (const [k, v] of Object.entries(patchApp || {})) {
+    const col = EDITABLE_MAP[k];
+    if (col) patch[col] = v;
+  }
+  if (!Object.keys(patch).length) throw new Error('Tidak ada perubahan untuk disimpan.');
+  const { data, error } = await supabase
+    .from(TABLE)
+    .update(patch)
+    .eq('reg_no', regNo)
+    .select();
+  if (error) throw error;
+  const row = (data || [])[0];
+  return row ? rowToApplicant(row) : null;
+}

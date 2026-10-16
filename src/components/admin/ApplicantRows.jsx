@@ -6,7 +6,7 @@ export function badgeClass(status) {
   return 'bg-amber-100 text-amber-800';
 }
 
-export function ApplicantRows({ rows, onDetail, onQuickApprove }) {
+export function ApplicantRows({ rows, onDetail, onQuickApprove, onEdit, onDelete }) {
   return (
     <tbody className="divide-y divide-slate-100">
       {rows.map((item) => (
@@ -48,6 +48,12 @@ export function ApplicantRows({ rows, onDetail, onQuickApprove }) {
                   <i className="fa-solid fa-check"></i>
                 </button>
               )}
+              <button onClick={() => onEdit?.(item.id)} title="Perbaiki data (salah nama/NIK/dll)" className="w-7 h-7 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-xl transition flex items-center justify-center">
+                <i className="fa-solid fa-pen"></i>
+              </button>
+              <button onClick={() => onDelete?.(item.id)} title="Hapus data pendaftar" className="w-7 h-7 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-xl transition flex items-center justify-center">
+                <i className="fa-solid fa-trash-can"></i>
+              </button>
             </div>
           </td>
         </tr>
