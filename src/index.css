@@ -29,20 +29,62 @@
   body * {
     visibility: hidden !important;
   }
-  /* Mode 1: cetak standee QR */
+  /* Mode 1: cetak standee QR — penuh kertas A4, semua elemen diperbesar */
   body.print-mode-qr #print-qr-target,
   body.print-mode-qr #print-qr-target * {
     visibility: visible !important;
   }
   body.print-mode-qr #print-qr-target {
-    position: absolute;
-    left: 50% !important;
+    position: absolute !important;
+    left: 1cm !important;
     top: 1cm !important;
-    transform: translateX(-50%) !important;
     width: 190mm !important;
     height: 277mm !important;
     max-width: none !important;
-    display: block !important;
+    max-height: none !important;
+    padding: 12mm !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    text-align: center !important;
+  }
+  /* Isi konten tarik lebar penuh */
+  body.print-mode-qr #print-qr-target > * {
+    width: 100% !important;
+    max-width: none !important;
+  }
+  /* Logo diperbesar */
+  body.print-mode-qr #print-qr-target img {
+    width: 30mm !important;
+    height: auto !important;
+    margin: 4mm 0 !important;
+  }
+  /* QR Code diperbesar agar bisa dipindai dari jarak */
+  body.print-mode-qr #print-qr-target svg {
+    width: 120mm !important;
+    height: 120mm !important;
+    margin: 6mm 0 !important;
+  }
+  /* Teks biasa diperbesar */
+  body.print-mode-qr #print-qr-target p,
+  body.print-mode-qr #print-qr-target span {
+    font-size: 5mm !important;
+    line-height: 1.4 !important;
+    margin: 2mm 0 !important;
+  }
+  /* Teks tebal / judul diperbesar lebih */
+  body.print-mode-qr #print-qr-target .font-black,
+  body.print-mode-qr #print-qr-target .font-extrabold {
+    font-size: 8mm !important;
   }
   /* Mode 2: cetak daftar pendaftar */
   body.print-mode-list #print-applicant-list,
