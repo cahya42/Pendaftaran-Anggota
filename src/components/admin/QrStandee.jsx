@@ -39,7 +39,16 @@ export default function QrStandee({ eventTag, setEventTag, officer, setOfficer, 
           </div>
           <div className="flex flex-wrap gap-3 pt-2">
             <button
-              onClick={() => window.print()}
+              onClick={() => {
+                document.body.classList.remove('print-mode-list', 'print-mode-detail');
+                document.body.classList.add('print-mode-qr');
+                const cleanup = () => {
+                  document.body.classList.remove('print-mode-qr');
+                  window.removeEventListener('afterprint', cleanup);
+                };
+                window.addEventListener('afterprint', cleanup);
+                window.print();
+              }}
               className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-tjokro-gold to-tjokro-accentgold hover:from-tjokro-amber hover:to-tjokro-gold text-slate-950 font-black text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/30"
             >
               <i className="fa-solid fa-print"></i> Cetak Poster / Standee QR

@@ -18,7 +18,7 @@ export default function AdminToolbar({ search, setSearch, statusFilter, setStatu
           <option value="Disetujui">Disetujui</option>
           <option value="Ditolak">Ditolak</option>
         </select>
-        <button onClick={onPrintList} className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition">
+        <button type="button" onClick={onPrintList} className="cursor-pointer px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition">
           <i className="fa-solid fa-print text-tjokro-accentgold"></i><span>Cetak Daftar</span>
         </button>
         <button onClick={onExport} className="px-3.5 py-2 rounded-xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs flex items-center gap-1.5 shadow-sm">

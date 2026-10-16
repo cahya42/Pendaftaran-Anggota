@@ -50,7 +50,7 @@ export default function ApplicantModal({ applicant, onClose, onChangeStatus, onP
         </div>
         <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-2.5 flex-wrap">
           <button onClick={onClose} className="px-4 py-2 rounded-xl border border-slate-300 font-bold text-xs text-slate-600 hover:bg-slate-200 transition">Tutup</button>
-          <button onClick={() => onPrintDetail(applicant)} className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs transition flex items-center gap-1.5">
+          <button type="button" onClick={() => onPrintDetail(applicant)} className="cursor-pointer px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-bold text-xs transition flex items-center gap-1.5">
             <i className="fa-solid fa-print text-tjokro-accentgold"></i> Cetak Formulir
           </button>
           {applicant.status !== 'Disetujui' && (

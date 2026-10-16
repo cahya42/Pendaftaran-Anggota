@@ -1,12 +1,25 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import QrStandee from './QrStandee.jsx';
 import ApplicantModal from './ApplicantModal.jsx';
 import StatCard from './AdminStats.jsx';
 import AdminToolbar from './AdminToolbar.jsx';
 import { ApplicantRows } from './ApplicantRows.jsx';
+import { PrintApplicantList, PrintApplicantDetail } from './PrintSheets.jsx';
 import { exportApplicantsToCSV } from '../../utils/helpers.js';
 
 const HEADERS = ['No. Registrasi', 'Calon Anggota', 'Kontak WhatsApp', 'Pekerjaan', 'Komitmen Setoran', 'Status & NIA', 'Aksi'];
+
+// Set mode cetak di <body> lalu panggil dialog print browser
+function doPrint(mode) {
+  document.body.classList.remove('print-mode-qr', 'print-mode-list', 'print-mode-detail');
+  document.body.classList.add(`print-mode-${mode}`);
+  const cleanup = () => {
+    document.body.classList.remove(`print-mode-${mode}`);
+    window.removeEventListener('afterprint', cleanup);
+  };
+  window.addEventListener('afterprint', cleanup);
+  window.print();
+}
 
 export default function AdminPanel({ applicants, onChangeStatus, notify, onPreviewHp }) {
   const [search, setSearch] = useState('');
@@ -14,6 +27,9 @@ export default function AdminPanel({ applicants, onChangeStatus, notify, onPrevi
   const [detailId, setDetailId] = useState(null);
   const [eventTag, setEventTag] = useState('EVENT-PURWAKARTA-ISTIMEWA');
   const [officer, setOfficer] = useState('Pengurus Koperasi HOS TJOKRO');
+  const [printDetailData, setPrintDetailData] = useState(null);
+  const printListRef = useRef(null);
+  const printDetailRef = useRef(null);
 
   const count = (s) => applicants.filter((a) => a.status === s).length;
   const q = search.toLowerCase();
@@ -33,6 +49,17 @@ export default function AdminPanel({ applicants, onChangeStatus, notify, onPrevi
     notify('File CSV berhasil diunduh!', 'success');
   };
 
+  const onPrintList = () => {
+    if (!rows.length) { notify('Tidak ada data pendaftar untuk dicetak', 'error'); return; }
+    doPrint('list');
+  };
+
+  const onPrintDetail = (applicant) => {
+    setPrintDetailData(applicant);
+    // beri React satu frame untuk merender lembar cetak sebelum dialog print
+    requestAnimationFrame(() => doPrint('detail'));
+  };
+
   return (
     <section className="space-y-7">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -43,7 +70,7 @@ export default function AdminPanel({ applicants, onChangeStatus, notify, onPrevi
       </div>
       <QrStandee eventTag={eventTag} setEventTag={setEventTag} officer={officer} setOfficer={setOfficer} onPreviewHp={onPreviewHp} notify={notify} />
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-        <AdminToolbar search={search} setSearch={setSearch} statusFilter={filter} setStatusFilter={setFilter} onExport={onExport} />
+        <AdminToolbar search={search} setSearch={setSearch} statusFilter={filter} setStatusFilter={setFilter} onExport={onExport} onPrintList={onPrintList} />
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50 text-slate-600 uppercase font-bold border-b border-slate-200 text-[11px]">
@@ -54,7 +81,11 @@ export default function AdminPanel({ applicants, onChangeStatus, notify, onPrevi
         </div>
         {rows.length === 0 && (<div className="p-8 text-center text-slate-400 text-xs"><i className="fa-regular fa-folder-open text-2xl mb-1 block"></i>Tidak ditemukan data pendaftar.</div>)}
       </div>
-      <ApplicantModal applicant={applicants.find((a) => a.id === detailId) || null} onClose={() => setDetailId(null)} onChangeStatus={changeStatus} />
+      <ApplicantModal applicant={applicants.find((a) => a.id === detailId) || null} onClose={() => setDetailId(null)} onChangeStatus={changeStatus} onPrintDetail={onPrintDetail} />
+
+      {/* Lembar tersembunyi — hanya muncul saat Ctrl+P / tombol cetak */}
+      <PrintApplicantList rows={rows} statusFilter={filter} search={search} printRef={printListRef} />
+      <PrintApplicantDetail applicant={printDetailData} printRef={printDetailRef} />
     </section>
   );
 }
