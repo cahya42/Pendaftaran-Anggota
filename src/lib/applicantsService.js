@@ -3,14 +3,12 @@ import { supabase } from './supabase.js';
 const TABLE = 'applicants';
 
 // DB (snake_case) -> App (camelCase)
-// Dibuat toleran: kalau kolom belum ada di DB (tabel lama),
-// pakai nilai default agar fetch tidak crash.
 export function rowToApplicant(row) {
   if (!row) return null;
   return {
     // id unik internal (uuid dari supabase) — dipakai sebagai key React
-    _key: row.id ?? row.reg_no,
-    id: row.reg_no ?? row.id,
+    _key: row.id,
+    id: row.reg_no,
     nia: row.nia || '-',
     nama: row.nama,
     nik: row.nik,
@@ -70,53 +68,14 @@ export async function fetchApplicants() {
   return (data || []).map(rowToApplicant);
 }
 
-// Langganan realtime: setiap ada INSERT/UPDATE/DELETE di tabel applicants,
-// panggil ulang fetch agar panel admin selalu segar tanpa refresh manual.
-// Kembalikan fungsi unsubscribe untuk dipanggil saat komponen dilepas.
-export function subscribeApplicants(onChange) {
-  const channel = supabase
-    .channel('applicants-realtime')
-    .on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, () => {
-      try {
-        onChange?.();
-      } catch (e) {
-        console.error('[supabase] realtime handler gagal:', e?.message || e);
-      }
-    })
-    .subscribe();
-  return () => {
-    try {
-      supabase.removeChannel(channel);
-    } catch {
-      /* abaikan */
-    }
-  };
-}
-
 export async function insertApplicant(applicant) {
-  // Tahan terhadap tabel lama yang belum punya kolom baru:
-  // kalau Supabase protes "Could not find the 'xxx' column",
-  // buang kolom itu dari payload lalu coba lagi.
-  let payload = applicantToRow(applicant);
-  for (let attempt = 0; attempt < 12; attempt++) {
-    const { data, error } = await supabase
-      .from(TABLE)
-      .insert(payload)
-      .select();
-    if (!error) {
-      const row = (data || [])[0];
-      return row ? rowToApplicant(row) : null;
-    }
-    const m = String(error.message || '').match(/Could not find the '([^']+)' column/i);
-    if (m && m[1] && m[1] in payload) {
-      console.warn(`[supabase] kolom ${m[1]} belum ada di tabel, dicoba tanpa kolom itu...`);
-      const { [m[1]]: _dropped, ...rest } = payload;
-      payload = rest;
-      continue;
-    }
-    throw error;
-  }
-  throw new Error('Insert gagal setelah retry tanpa kolom baru.');
+  const { data, error } = await supabase
+    .from(TABLE)
+    .insert(applicantToRow(applicant))
+    .select();
+  if (error) throw error;
+  const row = (data || [])[0];
+  return row ? rowToApplicant(row) : null;
 }
 
 export async function updateApplicantStatus(regNo, status, nia = null) {
@@ -141,47 +100,4 @@ export async function updatePaymentStatus(regNo, statusBayar) {
   if (error) throw error;
   const row = (data || [])[0];
   return row ? rowToApplicant(row) : null;
-}
-
-export async function deleteApplicant(regNo) {
-  const { error } = await supabase
-    .from(TABLE)
-    .delete()
-    .eq('reg_no', regNo);
-  if (error) throw error;
-  return true;
-}
-
-// Patch umum untuk edit data (nama, NIK, HP, alamat, pekerjaan, dll).
-// key App (camelCase) -> kolom DB (snake_case).
-const EDITABLE_MAP = {
-  nama: 'nama',
-  nik: 'nik',
-  nia: 'nia',
-  ttl: 'ttl',
-  gender: 'gender',
-  pekerjaan: 'pekerjaan',
-  hp: 'hp',
-  email: 'email',
-  alamat: 'alamat',
-  simpananWajib: 'simpanan_wajib',
-  simpananSukarela: 'simpanan_sukarela',
-  metode: 'metode',
-};
-
-export async function updateApplicant(regNo, patchApp) {
-  const patch = {};
-  for (const [k, v] of Object.entries(patchApp || {})) {
-    const col = EDITABLE_MAP[k];
-    if (col) patch[col] = v;
-  }
-  if (!Object.keys(patch).length) throw new Error('Tidak ada perubahan untuk disimpan.');
-  const { data, error } = await supabase
-    .from(TABLE)
-    .update(patch)
-    .eq('reg_no', regNo)
-    .select();
-  if (error) throw error;
-  const row = (data || [])[0];
-  return row ? rowToApplicant(row) : null;
-}
+}      xc
