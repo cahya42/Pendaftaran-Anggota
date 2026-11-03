@@ -7,6 +7,8 @@ import { DeleteConfirmDialog, EditApplicantDialog } from './AdminDialogs.jsx';
 import { ApplicantRows } from './ApplicantRows.jsx';
 import { PrintApplicantList, PrintApplicantDetail } from './PrintSheets.jsx';
 import { exportApplicantsToCSV } from '../../utils/helpers.js';
+import PaymentManager from './PaymentManager';
+
 
 const HEADERS = ['No. Registrasi', 'Calon Anggota', 'Kontak WhatsApp', 'Pekerjaan', 'Komitmen Setoran', 'Status & NIA', 'Aksi'];
 
@@ -119,6 +121,7 @@ export default function AdminPanel({ applicants, onChangeStatus, onChangePayment
         <StatCard label="Perlu Perbaikan" value={count('Ditolak')} icon="fa-solid fa-circle-exclamation" box="bg-rose-50 text-rose-600" text="text-rose-600" />
       </div>
       <QrStandee eventTag={eventTag} setEventTag={setEventTag} officer={officer} setOfficer={setOfficer} onPreviewHp={onPreviewHp} notify={notify} />
+      <PaymentManager notify={notify} />
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
         <AdminToolbar search={search} setSearch={setSearch} statusFilter={filter} setStatusFilter={setFilter} onExport={onExport} onPrintList={onPrintList} onRefresh={handleRefresh} refreshing={refreshing} />
         <div className="overflow-x-auto">
