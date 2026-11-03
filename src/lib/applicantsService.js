@@ -106,4 +106,12 @@ export async function updatePaymentStatus(regNo, statusBayar) {
   if (error) throw error;
   const row = (data || [])[0];
   return row ? rowToApplicant(row) : null;
+}
+
+export async function removeApplicant(regNo) {
+  const { error } = await supabase
+    .from(TABLE)
+    .delete()
+    .eq('reg_no', regNo);
+  if (error) throw error;
 }      xc

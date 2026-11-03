@@ -4,7 +4,7 @@ import Toast from './components/Toast.jsx';
 import MemberView from './components/wizard/MemberView.jsx';
 import AdminPanel from './components/admin/AdminPanel.jsx';
 import { INITIAL_APPLICANTS } from './data/applicants.js';
-import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus, deleteApplicant, updateApplicant, subscribeApplicants } from './lib/applicantsService.js';
+import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus, removeApplicant, updateApplicant, subscribeApplicants } from './lib/applicantsService.js';
 import { generateNia } from './utils/helpers.js';
 
 const SUPABASE_READY = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
