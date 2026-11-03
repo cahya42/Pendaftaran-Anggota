@@ -29,6 +29,9 @@ export function rowToApplicant(row) {
     selfieUrl: row.selfie_url || '',
     buktiBayarUrl: row.bukti_bayar_url || '',
     ttdUrl: row.ttd_url || '',
+    bankRekening: row.bank_rekening || '',
+    bankNama: row.bank_nama || '',
+    qris_image_url: row.qris_image_url || '',
   };
 }
 
@@ -56,6 +59,9 @@ export function applicantToRow(a) {
     selfie_url: a.selfieUrl || null,
     bukti_bayar_url: a.buktiBayarUrl || null,
     ttd_url: a.ttdUrl || null,
+    bank_rekening: a.bankRekening || null,
+    bank_nama: a.bankNama || null,
+    qris_image_url: a.qris_image_url || null,
   };
 }
 

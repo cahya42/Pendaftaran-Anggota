@@ -1,6 +1,8 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { PILIHAN_WAJIB, SIMPANAN_POKOK } from '../../data/applicants.js';
 import { formatRupiah, readFileAsCompressedDataURL } from '../../utils/helpers.js';
+import { fetchActiveBankAccounts } from '../../lib/bankAccountsService.js';
+import { fetchQris } from '../../lib/qrisService.js';
 
 export default function Step3Simpanan({ form, setForm }) {
   const sukarela = Number(form.simpananSukarela || 0);
@@ -11,6 +13,28 @@ export default function Step3Simpanan({ form, setForm }) {
     const n = val === '' ? 0 : Math.max(0, parseInt(val, 10) || 0);
     setForm((p) => ({ ...p, simpananSukarela: n }));
   };
+
+  const [bankAccounts, setBankAccounts] = useState([]);
+  const [qrisList, setQrisList] = useState([]);
+  const [loadingPayment, setLoadingPayment] = useState(true);
+
+  useEffect(() => {
+    const loadPaymentOptions = async () => {
+      try {
+        const [banks, qris] = await Promise.all([
+          fetchActiveBankAccounts(),
+          fetchQris(),
+        ]);
+        setBankAccounts(banks);
+        setQrisList(qris);
+      } catch (err) {
+        console.error('[Step3] Gagal memuat opsi pembayaran:', err.message);
+      } finally {
+        setLoadingPayment(false);
+      }
+    };
+    loadPaymentOptions();
+  }, []);
 
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-5">

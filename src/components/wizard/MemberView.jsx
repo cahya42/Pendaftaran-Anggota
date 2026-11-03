@@ -25,6 +25,9 @@ const EMPTY_FORM = {
   metode: 'QRIS',
   buktiBayarPreview: '',
   agreed: false,
+  bankRekening: '',
+  bankNama: '',
+  qris_image_url: '',
 };
 
 export default function MemberView({ onAddApplicant, notify }) {
