@@ -114,4 +114,29 @@ export async function removeApplicant(regNo) {
     .delete()
     .eq('reg_no', regNo);
   if (error) throw error;
+}
+
+export async function updateApplicant(regNo, patch) {
+  const { data, error } = await supabase
+    .from(TABLE)
+    .update(patch)
+    .eq('reg_no', regNo)
+    .select();
+  if (error) throw error;
+  const row = (data || [])[0];
+  return row ? rowToApplicant(row) : null;
+}
+
+export function subscribeApplicants(onChange) {
+  const { data, error } = supabase
+    .from(TABLE)
+    .on('*', (payload) => {
+      if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE' || payload.eventType === 'DELETE') {
+        onChange();
+      }
+    })
+    .subscribe();
+  return () => {
+    data.subscription.unsubscribe();
+  };
 }      xc
