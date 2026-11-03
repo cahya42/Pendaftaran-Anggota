@@ -9,6 +9,18 @@ export default function QrisUploader({ notify }) {
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
   const [label, setLabel] = useState('');
+  const [zoomed, setZoomed] = useState(null);
+
+  const downloadQris = (url) => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'qris.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const closeZoom = () => setZoomed(null);
 
   useEffect(() => {
     loadQris();
@@ -123,8 +135,25 @@ export default function QrisUploader({ notify }) {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {list.map((q) => (
-            <div key={q.id} className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-center gap-3">
-              <img src={q.qr_image_url} alt={q.label} className="w-14 h-14 object-contain rounded-xl border border-slate-200" />
+            <div key={q.id} className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-center gap-3 group relative">
+              <div className="relative">
+                <img
+                  src={q.qr_image_url}
+                  alt={q.label}
+                  className="w-14 h-14 object-contain rounded-xl border border-slate-200 cursor-pointer"
+                  onClick={() => setZoomed(q.qr_image_url)}
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    downloadQris(q.qr_image_url);
+                  }}
+                  className="absolute top-1 right-1 p-1 bg-white/90 hover:bg-white border rounded-lg text-slate-600 hover:text-tjokro-green text-xs opacity-0 group-hover:opacity-100 transition flex items-center justify-center"
+                  title="Download"
+                >
+                  <i className="fa-solid fa-download"></i>
+                </button>
+              </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold text-slate-800 truncate">{q.label || 'QRIS'}</p>
                 <p className="text-[11px] text-slate-500 truncate">{q.qr_image_url ? 'Terupload' : 'Tidak ada gambar'}</p>
@@ -137,5 +166,24 @@ export default function QrisUploader({ notify }) {
         </div>
       )}
     </div>
+
+    {zoomed && (
+      <div className="fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={closeZoom}>
+        <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
+          <button onClick={closeZoom} className="absolute top-4 right-4 p-2 bg-slate-100 rounded-full hover:bg-slate-200 text-slate-600 transition">
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+          <div className="p-6 flex flex-col items-center gap-4">
+            <img src={zoomed} alt="QRIS" className="max-h-80 max-w-[300px] object-contain rounded-xl border border-slate-200" />
+            <button
+              onClick={(e) => { e.stopPropagation(); downloadQris(zoomed); }}
+              className="px-4 py-2 rounded-xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs transition flex items-center gap-2"
+            >
+              <i className="fa-solid fa-download"></i> Download
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
   );
 }

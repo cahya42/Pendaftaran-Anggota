@@ -17,6 +17,16 @@ export default function Step3Simpanan({ form, setForm }) {
   const [bankAccounts, setBankAccounts] = useState([]);
   const [qrisList, setQrisList] = useState([]);
   const [loadingPayment, setLoadingPayment] = useState(true);
+  const [zoomedQris, setZoomedQris] = useState(null);
+
+  const downloadQris = (url) => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'qris.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
 
   useEffect(() => {
     const loadPaymentOptions = async () => {
@@ -147,8 +157,25 @@ export default function Step3Simpanan({ form, setForm }) {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {qrisList.map((q) => (
-                    <div key={q.id} className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col items-center text-center">
-                      <img src={q.qr_image_url} alt={q.label} className="w-32 h-32 object-contain rounded-lg border border-slate-200 mb-2" />
+                    <div key={q.id} className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col items-center text-center group relative">
+                      <div className="relative mb-2">
+                        <img
+                          src={q.qr_image_url}
+                          alt={q.label}
+                          className="w-32 h-32 object-contain rounded-lg border border-slate-200 cursor-pointer"
+                          onClick={() => setZoomedQris(q.qr_image_url)}
+                        />
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            downloadQris(q.qr_image_url);
+                          }}
+                          className="absolute top-1 right-1 p-1 bg-white/90 hover:bg-white border rounded-lg text-slate-600 hover:text-tjokro-green text-xs opacity-0 group-hover:opacity-100 transition flex items-center justify-center"
+                          title="Download"
+                        >
+                          <i className="fa-solid fa-download"></i>
+                        </button>
+                      </div>
                       <p className="text-xs font-bold text-slate-800">{q.label || 'QRIS Koperasi'}</p>
                     </div>
                   ))}
@@ -217,5 +244,24 @@ export default function Step3Simpanan({ form, setForm }) {
         </p>
       </div>
     </div>
+
+    {zoomedQris && (
+      <div className="fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setZoomedQris(null)}>
+        <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
+          <button onClick={() => setZoomedQris(null)} className="absolute top-4 right-4 p-2 bg-slate-100 rounded-full hover:bg-slate-200 text-slate-600 transition">
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+          <div className="p-6 flex flex-col items-center gap-4">
+            <img src={zoomedQris} alt="QRIS" className="max-h-80 max-w-[300px] object-contain rounded-xl border border-slate-200" />
+            <button
+              onClick={(e) => { e.stopPropagation(); downloadQris(zoomedQris); }}
+              className="px-4 py-2 rounded-xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs transition flex items-center gap-2"
+            >
+              <i className="fa-solid fa-download"></i> Download
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
   );
 }
