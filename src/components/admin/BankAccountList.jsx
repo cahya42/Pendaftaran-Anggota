@@ -3,12 +3,6 @@ import { useState } from 'react';
 export default function BankAccountList({ accounts, loading, onEdit, onDelete }) {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h4 className="text-sm font-extrabold text-slate-800 flex items-center gap-2">
-          <i className="fa-solid fa-university text-tjokro-green"></i> Rekening Bank
-        </h4>
-      </div>
-
       {loading ? (
         <p className="text-xs text-slate-500 text-center py-4">Memuat rekening bank...</p>
       ) : accounts.length === 0 ? (
