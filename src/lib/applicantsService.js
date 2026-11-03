@@ -128,15 +128,16 @@ export async function updateApplicant(regNo, patch) {
 }
 
 export function subscribeApplicants(onChange) {
-  const { data, error } = supabase
-    .from(TABLE)
-    .on('*', (payload) => {
-      if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE' || payload.eventType === 'DELETE') {
-        onChange();
-      }
-    })
-    .subscribe();
+  // Gunakan supabase.channel() untuk realtime v2
+  // Metode lama .from().on() menyebabkan TypeError: Jt.from(...).on is not a function di production/Vercel
+  const channel = supabase.channel('supabase-realtime');
+  channel.on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, (payload) => {
+    onChange();
+  });
+  channel.subscribe();
+
   return () => {
-    data.subscription.unsubscribe();
+    channel.unsubscribe();
   };
 }
+
