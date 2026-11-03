@@ -49,17 +49,17 @@ export default function BankAccountManager({ notify }) {
     setForm({ bank: '', nomor_rekening: '', nama_pemilik: '', is_active: true });
   };
 
-  const save = async () => {
-    if (!form.bank.trim()) { notify('Nama bank wajib diisi', 'error'); return; }
-    if (!form.nomor_rekening.trim()) { notify('Nomor rekening wajib diisi', 'error'); return; }
+  const save = async (formData) => {
+    if (!formData.bank.trim()) { notify('Nama bank wajib diisi', 'error'); return; }
+    if (!formData.nomor_rekening.trim()) { notify('Nomor rekening wajib diisi', 'error'); return; }
     setBusy(true);
     try {
       if (editingId) {
-        await updateBankAccount(editingId, form);
-        setAccounts(prev => prev.map(a => a.id === editingId ? { ...a, ...form } : a));
+        await updateBankAccount(editingId, formData);
+        setAccounts(prev => prev.map(a => a.id === editingId ? { ...a, ...formData } : a));
         notify('Rekening bank diperbarui', 'success');
       } else {
-        const saved = await insertBankAccount(form);
+        const saved = await insertBankAccount(formData);
         setAccounts(prev => [saved, ...prev]);
         notify('Rekening bank ditambahkan', 'success');
       }
