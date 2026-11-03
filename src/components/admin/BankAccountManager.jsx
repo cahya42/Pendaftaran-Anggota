@@ -22,7 +22,10 @@ export default function BankAccountManager({ notify }) {
       setAccounts(list);
     } catch (err) {
       console.error('[bank accounts] load gagal:', err.message);
-      notify('Gagal memuat rekening bank: ' + err.message, 'error');
+      const hint = err.message?.includes('does not exist') || err.message?.includes('relation')
+        ? ' — Tabel bank_accounts belum dibuat. Jalankan migration-bank-qris.sql di Supabase SQL Editor.'
+        : '';
+      notify('Gagal memuat rekening bank: ' + err.message + hint, 'error');
     } finally {
       setLoading(false);
     }
@@ -63,7 +66,12 @@ export default function BankAccountManager({ notify }) {
       closeForm();
     } catch (err) {
       console.error('[bank account] save error:', err.message);
-      notify(err.message || 'Gagal menyimpan rekening', 'error');
+      const hint = err.message?.includes('does not exist') || err.message?.includes('relation')
+        ? ' — Tabel bank_accounts belum dibuat. Jalankan migration-bank-qris.sql di Supabase SQL Editor.'
+        : err.message?.includes('row-level security') || err.message?.includes('policy')
+        ? ' — RLS policy belum diatur. Jalankan migration-bank-qris.sql di Supabase SQL Editor.'
+        : '';
+      notify('Gagal menyimpan rekening: ' + (err.message || 'Error') + hint, 'error');
     } finally { setBusy(false); }
   };
 
