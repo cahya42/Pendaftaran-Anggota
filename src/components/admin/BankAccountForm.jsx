@@ -39,15 +39,15 @@ export default function BankAccountForm({ mode, initialData, onCancel, onSave, b
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div>
             <label className="block text-[11px] font-bold text-slate-600 mb-1">Nama Bank</label>
-            <input type="text" value={form.bank} onChange={(e) => set(e, e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-tjokro-green font-semibold" placeholder="Contoh: BCA" />
+            <input type="text" value={form.bank} onChange={(e) => set('bank', e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-tjokro-green font-semibold" placeholder="Contoh: BCA" />
           </div>
           <div>
             <label className="block text-[11px] font-bold text-slate-600 mb-1">Nomor Rekening</label>
-            <input type="text" value={form.nomor_rekening} onChange={(e) => set(e, e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-tjokro-green font-semibold" placeholder="1234567890" />
+            <input type="text" value={form.nomor_rekening} onChange={(e) => set('nomor_rekening', e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-tjokro-green font-semibold" placeholder="1234567890" />
           </div>
           <div className="sm:col-span-2">
             <label className="block text-[11px] font-bold text-slate-600 mb-1">Nama Pemilik</label>
-            <input type="text" value={form.nama_pemilik} onChange={(e) => set(e, e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-tjokro-green font-semibold" placeholder="Nama pemilik rekening" />
+            <input type="text" value={form.nama_pemilik} onChange={(e) => set('nama_pemilik', e.target.value)} className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-tjokro-green font-semibold" placeholder="Nama pemilik rekening" />
           </div>
           <div className="flex items-center justify-end gap-3 pt-2">
             <button onClick={onCancel} disabled={busy} className="px-4 py-2 rounded-xl border border-slate-300 font-bold text-xs text-slate-600 hover:bg-slate-200 transition disabled:opacity-60">Batal</button>

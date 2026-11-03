@@ -130,7 +130,58 @@ export default function Step3Simpanan({ form, setForm }) {
         </div>
       </div>
 
-      {/* Upload Bukti Pembayaran (opsional) */}
+      {/* Daftar Rekening Bank & QRIS */}
+      {loadingPayment ? (
+        <div className="text-center py-4 text-xs text-slate-400">
+          <i className="fa-solid fa-circle-notch fa-spin mr-1"></i> Memuat opsi pembayaran...
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {form.metode === 'QRIS' && (
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Scan QRIS Koperasi</label>
+              {qrisList.length === 0 ? (
+                <p className="text-xs text-slate-400 text-center py-4 border-2 border-dashed border-slate-200 rounded-xl">
+                  Belum ada QRIS. Hubungi pengurus.
+                </p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {qrisList.map((q) => (
+                    <div key={q.id} className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col items-center text-center">
+                      <img src={q.qr_image_url} alt={q.label} className="w-32 h-32 object-contain rounded-lg border border-slate-200 mb-2" />
+                      <p className="text-xs font-bold text-slate-800">{q.label || 'QRIS Koperasi'}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          {form.metode === 'Transfer Bank / Kasir' && (
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Pilih Rekening Koperasi</label>
+              {bankAccounts.length === 0 ? (
+                <p className="text-xs text-slate-400 text-center py-4 border-2 border-dashed border-slate-200 rounded-xl">
+                  Belum ada rekening bank. Hubungi pengurus.
+                </p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {bankAccounts.map((acc) => (
+                    <div key={acc.id} className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-extrabold text-tjokro-darkgreen">{acc.bank}</span>
+                      </div>
+                      <div className="text-[11px] text-slate-500 mb-1">No. Rekening</div>
+                      <div className="font-mono font-bold text-slate-800 text-sm mb-1">{acc.nomor_rekening}</div>
+                      <div className="text-[11px] text-slate-500">a/n</div>
+                      <div className="font-semibold text-slate-700 text-xs">{acc.nama_pemilik || '-'}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
       <div className="space-y-2">
         <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
           Bukti Pembayaran Setoran Awal <span className="text-slate-400 font-normal">(Opsional)</span>
