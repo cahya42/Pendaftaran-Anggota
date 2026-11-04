@@ -4,7 +4,7 @@ import Toast from './components/Toast.jsx';
 import MemberView from './components/wizard/MemberView.jsx';
 import AdminPanel from './components/admin/AdminPanel.jsx';
 import { INITIAL_APPLICANTS } from './data/applicants.js';
-import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus, removeApplicant as deleteApplicantService, updateApplicant, subscribeApplicants } from './lib/applicantsService.js';
+import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus, removeApplicant as deleteApplicantService, updateApplicant, subscribeApplicants, applicantToRow } from './lib/applicantsService.js';
 import { generateNia } from './utils/helpers.js';
 
 const SUPABASE_READY = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
@@ -140,7 +140,8 @@ export default function App() {
       return true;
     }
     try {
-      const saved = await updateApplicant(id, patch);
+      const patchRow = applicantToRow({ ...target, ...patch });
+      const saved = await updateApplicant(id, patchRow);
       if (saved) setApplicants((prev) => prev.map((a) => (a.id === id ? saved : a)));
       notify(`Data ${merged.nama} berhasil diperbarui.`, 'success');
       return true;
