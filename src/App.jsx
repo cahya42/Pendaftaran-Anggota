@@ -4,7 +4,7 @@ import Toast from './components/Toast.jsx';
 import MemberView from './components/wizard/MemberView.jsx';
 import AdminPanel from './components/admin/AdminPanel.jsx';
 import { INITIAL_APPLICANTS } from './data/applicants.js';
-import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus, removeApplicant, updateApplicant, subscribeApplicants } from './lib/applicantsService.js';
+import { fetchApplicants, insertApplicant, updateApplicantStatus, updatePaymentStatus, removeApplicant as deleteApplicantService, updateApplicant, subscribeApplicants } from './lib/applicantsService.js';
 import { generateNia } from './utils/helpers.js';
 
 const SUPABASE_READY = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
@@ -117,7 +117,7 @@ export default function App() {
       return true;
     }
     try {
-      await deleteApplicant(id);
+      await deleteApplicantService(id);
       notify(`Data ${target?.nama || id} dihapus permanen dari database.`, 'success');
       return true;
     } catch (err) {
