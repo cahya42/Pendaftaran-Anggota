@@ -1,4 +1,4 @@
-export const SIMPANAN_POKOK = 25000;
+export const SIMPANAN_POKOK = 50000;
 
 export const PILIHAN_WAJIB = [
   { value: 10000, label: 'Rp 10.000 / bln' },

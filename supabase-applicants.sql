@@ -15,7 +15,7 @@ create table if not exists public.applicants (
   hp text,
   email text,
   alamat text,
-  simpanan_pokok integer not null default 25000,
+  simpanan_pokok integer not null default 50000,
   simpanan_wajib integer not null default 10000,
   simpanan_sukarela integer not null default 0,
   bukti_bayar_url text,
