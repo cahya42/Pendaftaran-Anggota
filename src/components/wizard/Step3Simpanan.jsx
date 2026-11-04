@@ -243,25 +243,24 @@ export default function Step3Simpanan({ form, setForm }) {
           Tampil di Panel Pengurus untuk verifikasi — status &quot;Lunas&quot; ditandai setelah cocok dengan mutasi rekening.
         </p>
       </div>
-    </div>
-
-    {zoomedQris && (
-      <div className="fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setZoomedQris(null)}>
-        <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
-          <button onClick={() => setZoomedQris(null)} className="absolute top-4 right-4 p-2 bg-slate-100 rounded-full hover:bg-slate-200 text-slate-600 transition">
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-          <div className="p-6 flex flex-col items-center gap-4">
-            <img src={zoomedQris} alt="QRIS" className="max-h-80 max-w-[300px] object-contain rounded-xl border border-slate-200" />
-            <button
-              onClick={(e) => { e.stopPropagation(); downloadQris(zoomedQris); }}
-              className="px-4 py-2 rounded-xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs transition flex items-center gap-2"
-            >
-              <i className="fa-solid fa-download"></i> Download
+      {zoomedQris && (
+        <div className="fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setZoomedQris(null)}>
+          <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setZoomedQris(null)} className="absolute top-4 right-4 p-2 bg-slate-100 rounded-full hover:bg-slate-200 text-slate-600 transition">
+              <i className="fa-solid fa-xmark"></i>
             </button>
+            <div className="p-6 flex flex-col items-center gap-4">
+              <img src={zoomedQris} alt="QRIS" className="max-h-80 max-w-[300px] object-contain rounded-xl border border-slate-200" />
+              <button
+                onClick={(e) => { e.stopPropagation(); downloadQris(zoomedQris); }}
+                className="px-4 py-2 rounded-xl bg-tjokro-green hover:bg-tjokro-darkgreen text-white font-bold text-xs transition flex items-center gap-2"
+              >
+                <i className="fa-solid fa-download"></i> Download
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
+    </div>
   );
 }

@@ -165,8 +165,6 @@ export default function QrisUploader({ notify }) {
           ))}
         </div>
       )}
-    </div>
-
     {zoomed && (
       <div className="fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={closeZoom}>
         <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
@@ -185,5 +183,6 @@ export default function QrisUploader({ notify }) {
         </div>
       </div>
     )}
+    </div>
   );
 }
